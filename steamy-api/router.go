@@ -14,6 +14,9 @@ func NewRouter() *mux.Router {
 
 		handler = route.HandlerFunc
 		handler = Logger(handler, route.Name)
+		if !route.Public {
+			handler = RequireAuthentication(handler)
+		}
 
 		router.
 			Methods(route.Method).
