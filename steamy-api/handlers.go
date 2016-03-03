@@ -49,7 +49,7 @@ func BuildsCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get file from request
-	file, _, err := r.FormFile("file")
+	file, _, err := r.FormFile("artifact")
 	if err != nil {
 		SetBadRequestResponse(w)
 		return

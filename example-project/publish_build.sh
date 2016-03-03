@@ -31,7 +31,6 @@ tar --exclude-vcs-ignores --exclude-vcs --create --gzip --file "build/$BUILDNAME
 
 # Publish it
 steamy -publish \
-  -token "$STEAMY_API_TOKEN" \
   -version "$STEAMY_PROJECT.$BUILD_DATE.$REPO_COMMIT_7"
   -artifact "build/$BUILDNAME" \
   -project "$STEAMY_PROJECT" \
