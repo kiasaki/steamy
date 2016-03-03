@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -182,10 +183,20 @@ func runPublishUpload(artifact string, params map[string]string) (err error) {
 	if err != nil {
 		return
 	}
+	defer res.Body.Close()
 
 	// Check the response
 	if res.StatusCode != http.StatusOK {
 		err = fmt.Errorf("Bad status from api: %s", res.Status)
+		return
 	}
+
+	// Write out answer
+	answer, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	fmt.Println(answer)
+
 	return
 }

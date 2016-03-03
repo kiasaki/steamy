@@ -40,7 +40,7 @@ func BuildsCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	project, err := ProjectsFetchOneByName(r.PostFormValue("project"))
+	project, err := ProjectsFetchOneByTitle(r.PostFormValue("project"))
 	if err != nil {
 		SetInternalServerErrorResponse(w, err)
 	} else if project == ProjectNotFound {

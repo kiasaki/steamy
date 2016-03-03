@@ -6,10 +6,11 @@ import (
 )
 
 type User struct {
-	Id       string
-	Email    string
-	Password string
-	Created  time.Time
+	Id       string    `json:"id"`
+	Email    string    `json:"email"`
+	Password string    `json:"password"`
+	Deleted  bool      `json:"deleted"`
+	Created  time.Time `json:"created"`
 }
 
 type Users []User

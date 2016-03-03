@@ -2,23 +2,23 @@ package main
 
 import "time"
 
-type HostState int
+type HostStatus string
 
 const (
-	HostStateActive   HostState = iota
-	HostStateInactive           = iota
-	HostStateMissing            = iota
-	HostStateDeleted            = iota
+	HostStatusActive   HostStatus = "active"
+	HostStatusInactive            = "inactive"
+	HostStatusMissing             = "missing"
+	HostStatusDeleted             = "deleted"
 )
 
 type Host struct {
-	Id      string
-	Name    string
-	Group   string
-	Ip      string
-	State   HostState
-	Created time.Time
-	Updated time.Time
+	Id       string     `json:"id"`
+	Hostname string     `json:"hostname"`
+	Groups   []string   `json:"groups"`
+	Ip       string     `json:"ip"`
+	Status   HostStatus `json:"status"`
+	Created  time.Time  `json:"created"`
+	Updated  time.Time  `json:"updated"`
 }
 
 type Hosts []Host

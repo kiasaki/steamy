@@ -7,7 +7,7 @@ import (
 
 type Project struct {
 	Id      string    `json:"id"`
-	Name    string    `json:"name"`
+	Title   string    `json:"title"`
 	Hosts   []string  `json:"hosts"`
 	Groups  []string  `json:"groups"`
 	Created time.Time `json:"created"`
@@ -18,14 +18,14 @@ type Projects []Project
 
 var ProjectNotFound = &Project{}
 
-var projectSqlParams = "id, name, hosts, groups, created, updated"
+var projectSqlParams = "id, title, hosts, groups, created, updated"
 
-func ProjectsFetchOneCreator(fieldName string) func(string) (*Project, error) {
+func MakeProjectsFetchOne(fieldName string) func(string) (*Project, error) {
 	return func(field string) (*Project, error) {
 		var e Project
 		var query = `SELECT ` + projectSqlParams + ` FROM projects WHERE ` + fieldName + ` = $1`
 		row := DbQueryRow(query, field)
-		err := row.Scan(&e.Id, &e.Name, &e.Hosts, &e.Groups, &e.Created, &e.Updated)
+		err := row.Scan(&e.Id, &e.Title, &e.Hosts, &e.Groups, &e.Created, &e.Updated)
 
 		switch {
 		case err == sql.ErrNoRows:
@@ -36,5 +36,5 @@ func ProjectsFetchOneCreator(fieldName string) func(string) (*Project, error) {
 	}
 }
 
-var ProjectsFetchOne = ProjectsFetchOneCreator("id")
-var ProjectsFetchOneByName = ProjectsFetchOneCreator("name")
+var ProjectsFetchOne = MakeProjectsFetchOne("id")
+var ProjectsFetchOneByTitle = MakeProjectsFetchOne("title")
