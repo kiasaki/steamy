@@ -3,15 +3,15 @@ package main
 import "time"
 
 type Build struct {
-	Id         string
-	Version    string
-	ProjectId  string
-	RepoUrl    string
-	RepoName   string
-	RepoBranch string
-	RepoCommit string
-	Publisher  string
-	Created    time.Time
+	Id         string    `json:"id"`
+	Version    string    `json:"version"`
+	ProjectId  string    `json:"project_id"`
+	RepoUrl    string    `json:"repo_url"`
+	RepoName   string    `json:"repo_name"`
+	RepoBranch string    `json:"repo_branch"`
+	RepoCommit string    `json:"repo_commit"`
+	Publisher  string    `json:"publisher"`
+	Created    time.Time `json:"created"`
 }
 
 type Builds []Build

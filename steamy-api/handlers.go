@@ -20,6 +20,19 @@ func BuildsIndex(w http.ResponseWriter, r *http.Request) {
 	SetOKResponse(w, J{})
 }
 
+func BuildsShowArtifact(w http.ResponseWriter, r *http.Request) {
+	var buildId = PathString(r, "buildId")
+	var buildArtifactPath = buildArtifactPath(buildId)
+
+	if _, err := os.Stat(buildArtifactPath); os.IsNotExist(err) {
+		SetNotFoundResponse(w)
+	} else if err != nil {
+		SetInternalServerErrorResponse(w, err)
+	} else {
+		http.ServeFile(w, r, buildArtifactPath)
+	}
+}
+
 func BuildsCreate(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseMultipartForm(32 << 20)
 	if err != nil {
