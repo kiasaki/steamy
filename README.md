@@ -35,15 +35,15 @@ This project is composed of three sub-components:
 
 ### How does it work?
 
-**1.**
+**1. Server installation**
 
 First step is to have `steamy-{api,ui}` up and running somewhere you have access to.
 
-**2.**
+**2. Local CLI installation**
 
 Next step you need to install `steamy-cli` on you local computer or on CI, anywhere you want to deploy from actually.
 
-**3.**
+**3. Make your project steamy aware**
 
 As part of the firt time setup you'll need to tell **steamy** _how_ it can update you app once your new build is on server. This is done using _bash_ scripts that you hold to dearly in the `steamy` directory.
 
@@ -74,7 +74,7 @@ aws elb register-instances-from-load-balancer --load-balancer-name my-app-lb --i
 
 Here's the complete deploy cycle: `PRE_DOWNLOAD->[DOWNLOADING]->POST_DOWNLOAD->[STAGING]->PRE_RESTART->RESTARTING->POST_RESTART->[SERVING]`
 
-**4.**
+**4. Publish your first build**
 
 Now, the first item that comes into play is *"build"*, we need to create a new build and publish it to *steamy*.
 
@@ -107,7 +107,7 @@ steamy/RESTARTING
 steamy/POST_RESTART
 ```
 
-**5.**
+**5. Deploy the build to servers**
 
 Next step is to start a deploy to an **environment** using the **build** you just created, kick back, and watch it progress.
 
