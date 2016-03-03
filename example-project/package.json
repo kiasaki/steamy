@@ -1,0 +1,12 @@
+{
+  "name": "example-project",
+  "version": "1.0.0",
+  "description": "This folder is an demo app to help you see what using *steamy* is like.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}

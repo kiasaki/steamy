@@ -12,7 +12,7 @@ var configDatabaseUrl string
 var configToken string
 
 func init() {
-	flag.IntVar(&configPort, "port", 8080, "Port to listen on")
+	flag.IntVar(&configPort, "port", 9484, "Port to listen on")
 	flag.StringVar(&configDatabaseUrl, "database-url", "postgres://localhost/steamy", "Database connection string")
 	flag.StringVar(&configToken, "token", "keyboardcat", "Secret API Token")
 }

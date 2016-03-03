@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
-# Make sure you have a STEAMY_API_TOKEN in your environment for
-# the API call to know who you are and authorize you
+# Make sure you have the following environment
+# variables defined so `steamy` can contact the api
+# STEAMY_URL = http://localhost:9484/
+# STEAMY_VERSION = v1
+# STEAMY_TOKEN = ...
 
+# This the name of the project you created in steamy
 STEAMY_PROJECT=example-project
 
 # Gather build info
 DIR=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-DIRNAME=$(basename $DIR)
+DIRNAME=$(basename "$DIR")
 BUILD_DATE=$(date +"%Y-%m-%d-%H%M%S")
 BUILDNAME="$DIRNAME.$BUILD_DATE.tar.gz"
 
