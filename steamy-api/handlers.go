@@ -1,13 +1,13 @@
 package main
 
 import (
-	"encoding/json"
 	"io"
-	"io/ioutil"
 	"net/http"
+	"os"
+	"time"
 )
 
-func Index(w http.ResponseWriter, r *http.Request) {
+func ApiIndex(w http.ResponseWriter, r *http.Request) {
 	SetOKResponse(w, J{
 		"data": J{
 			"version": "v1",
@@ -16,46 +16,66 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func ProjectsIndex(w http.ResponseWriter, r *http.Request) {
-	projects := Projects{
-		Project{Id: "1", Name: "App"},
-		Project{Id: "2", Name: "Api"},
-	}
-
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(projects); err != nil {
-		panic(err)
-	}
+func BuildsIndex(w http.ResponseWriter, r *http.Request) {
+	SetOKResponse(w, J{})
 }
 
-func ProjectsCreate(w http.ResponseWriter, r *http.Request) {
-	var project Project
-
-	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+func BuildsCreate(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseMultipartForm(32 << 20)
 	if err != nil {
-		panic(err)
+		SetInternalServerErrorResponse(w, err)
+		return
 	}
 
-	if err := r.Body.Close(); err != nil {
-		panic(err)
-	}
-
-	if err := json.Unmarshal(body, &project); err != nil {
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(422) // unprocessable entity
-		if err := json.NewEncoder(w).Encode(err); err != nil {
-			panic(err)
-		}
-	}
-
-	// create in db
+	project, err := ProjectsFetchOneByName(r.PostFormValue("project"))
 	if err != nil {
-		panic(err)
+		SetInternalServerErrorResponse(w, err)
+	} else if project == ProjectNotFound {
+		SetNotFoundResponse(w)
+		WriteEntity(w, J{"error": "Project not found"})
 	}
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusCreated)
-	if err := json.NewEncoder(w).Encode(struct{}{}); err != nil {
-		panic(err)
+
+	// Get file from request
+	file, _, err := r.FormFile("file")
+	if err != nil {
+		SetBadRequestResponse(w)
+		return
 	}
+	defer file.Close()
+
+	// Decide on new build id
+	var buildId = NewUUID().String()
+
+	// Save artifact to disk
+	var newFilePath = buildArtifactPath(buildId)
+	newFile, err := os.OpenFile(newFilePath, os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		SetInternalServerErrorResponse(w, err)
+		WriteEntity(w, J{"error": "Error saving build to disk"})
+		return
+	}
+	defer newFile.Close()
+
+	io.Copy(newFile, file)
+
+	// Create build
+	var build = &Build{
+		Id:         buildId,
+		Version:    r.PostFormValue("version"),
+		ProjectId:  project.Id,
+		RepoUrl:    r.PostFormValue("repo_url"),
+		RepoName:   r.PostFormValue("repo_name"),
+		RepoBranch: r.PostFormValue("repo_branch"),
+		RepoCommit: r.PostFormValue("repo_commit"),
+		Publisher:  r.PostFormValue("publisher"),
+		Created:    time.Now(),
+	}
+	err = DbBuildsCreate(build)
+	if err != nil {
+		SetInternalServerErrorResponse(w, err)
+		WriteEntity(w, J{"error": "Error saving build to database"})
+		return
+	}
+
+	SetNoContentResponse(w)
 }
