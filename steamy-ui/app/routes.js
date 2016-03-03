@@ -5,7 +5,7 @@ import App from './containers/App.jsx';
 import UsersPage from './containers/UsersPage.jsx';
 
 export default (
-    <Route path="/" component={App}>
-        <Route path="" component={UsersPage} />
+    <Route component={App}>
+        <Route path="/" component={UsersPage} />
     </Route>
 );

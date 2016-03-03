@@ -4,11 +4,17 @@ import { pushState } from 'redux-router';
 
 class App extends Component {
     componentDidMount() {
-        this.componentWillReceiveProps(this.props);
+        this.ensureCurrentUser(this.props);
     }
 
-    componentWillReceiveProps(nextProps) {
-        // handle auth & redirect
+    componentWillReceiveProps(newProps) {
+        this.ensureCurrentUser(newProps);
+    }
+
+    ensureCurrentUser(props) {
+        if (props.authToken && !props.authUser) {
+            //props.dispatch(loadCurrentUser());
+        }
     }
 
     render() {

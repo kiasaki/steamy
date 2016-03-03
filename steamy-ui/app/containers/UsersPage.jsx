@@ -4,7 +4,7 @@ import { pushState } from 'redux-router';
 
 class UsersPage extends Component {
     render() {
-        reutrn (
+        return (
             <div>Users</div>
         );
     }
