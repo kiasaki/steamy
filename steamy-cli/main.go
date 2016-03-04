@@ -175,7 +175,7 @@ func runPublishUpload(artifact string, params map[string]string) (err error) {
 	// Don't forget to set the content type, this will contain the boundary.
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 
-	req.Header.Set("Api-Token", configSteamyToken)
+	req.Header.Set("X-Api-Token", configSteamyToken)
 
 	// Submit the request
 	client := &http.Client{}

@@ -4,7 +4,7 @@ import "net/http"
 
 func RequireAuthentication(inner http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var apiToken = r.Header.Get("Api-Token")
+		var apiToken = r.Header.Get("X-Api-Token")
 
 		if apiToken == configToken {
 			inner.ServeHTTP(w, r)

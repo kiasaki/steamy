@@ -41,8 +41,8 @@ func main() {
 
 func addCORSMiddleware(handler http.Handler) http.Handler {
 	c := cors.New(cors.Options{
-		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE"},
-		AllowedHeaders:   []string{"Authorization", "X-Api-Token", "Api-Token"},
+		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Content-Type", "Authorization", "X-Api-Token"},
 		AllowCredentials: true,
 	})
 	return c.Handler(handler)
