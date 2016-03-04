@@ -1,0 +1,70 @@
+/* light green: #56EE3C */
+/* light purple: #7F2BFF */
+
+body, html {
+    margin: 0;
+    color: #222;
+    background: #efefef;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.text-right {
+    text-align: right;
+}
+.text-center {
+    text-align: center;
+}
+
+/* Header */
+.page-header {
+    background: #fff;
+    box-shadow: 0 0 3px rgba(0,0,0,0.25);
+    padding: 0.5em 0;
+}
+.page-header__title {
+    font-size: 1.25em;
+    line-height: 1.6em;
+    margin-right: 1em;
+}
+.page-header a {
+    line-height: 2em;
+    display: inline-block;
+    padding: 0 0.5em;
+    text-decoration: none;
+}
+.page-header a:hover {
+    text-decoration: underline;
+    background: #efefef;
+}
+
+/* Signin */
+.signin {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 5px solid #7F2BFF;
+}
+.signin__inner {
+    width: 90%;
+    max-width: 36rem;
+    margin: 8rem auto 4rem;
+    padding: 3rem;
+}
+.signin form {
+    margin-bottom: 0;
+}
+.signin input,
+.signin button {
+    width: 100%;
+}
+.signin button {
+    display: block;
+    color: #7F2BFF;
+    border-color: #7F2BFF;
+}
