@@ -20,6 +20,13 @@ class App extends Component {
     }
 
     render() {
+        const { currentUser } = this.props;
+
+        let email;
+        if (currentUser) {
+            email = currentUser.data.email;
+        }
+
         return (
             <div>
                 <header className="page-header">
@@ -41,6 +48,9 @@ class App extends Component {
                                 </a>
                             </div>
                             <div className="six columns text-right">
+                                <span>
+                                    {email}
+                                </span>
                                 <a href="/signout">
                                     Signout
                                 </a>
@@ -59,6 +69,7 @@ class App extends Component {
 const mapStateToProps = state => {
     const { authToken, entities } = state;
     const currentUser = entities.users.current;
+    console.log(currentUser);
 
     return {authToken, currentUser};
 };

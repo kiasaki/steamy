@@ -1,10 +1,17 @@
+import * as ActionTypes from '../actions';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import { erasePersistedToken } from '../lib/auth';
 
 class SignoutPage extends Component {
     componentDidMount() {
-        this.props.dispatch(push('/'));
+        const { dispatch } = this.props;
+
+        erasePersistedToken();
+        dispatch(ActionTypes.setAuthToken(null));
+        dispatch(ActionTypes.clearCurrentUser());
+        dispatch(push('/'));
     }
 
     render() {

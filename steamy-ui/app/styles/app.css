@@ -30,9 +30,10 @@ body, html {
 
 /* Header */
 .page-header {
-    background: #fff;
+    background: #7F2BFF;
     box-shadow: 0 0 3px rgba(0,0,0,0.25);
-    padding: 0.5em 0;
+    padding: 0.6em 0;
+    color: #fff;
 }
 .page-header__title {
     font-size: 1.25em;
@@ -40,14 +41,13 @@ body, html {
     margin-right: 1em;
 }
 .page-header a {
+    color: #fff;
     line-height: 2em;
     display: inline-block;
     padding: 0 0.5em;
-    text-decoration: none;
 }
 .page-header a:hover {
-    text-decoration: underline;
-    background: #efefef;
+    background: rgba(255,255,255,0.25);
 }
 
 /* Signin */
