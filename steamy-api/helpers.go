@@ -21,8 +21,7 @@ func JsonResponse(res http.ResponseWriter) {
 
 // Unmarshals request's body into a given object
 func Bind(req *http.Request, entity interface{}) error {
-	decoder := json.NewDecoder(req.Body)
-	return decoder.Decode(entity)
+	return json.NewDecoder(req.Body).Decode(entity)
 }
 
 func SetUnauthorizedResponse(res http.ResponseWriter) {

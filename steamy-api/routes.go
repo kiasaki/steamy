@@ -30,6 +30,13 @@ var routes = Routes{
 		ApiIndex,
 	},
 	Route{
+		"V1TokensCreate",
+		"POST",
+		"/v1/tokens",
+		true,
+		TokensCreate,
+	},
+	Route{
 		"V1BuildsIndex",
 		"GET",
 		"/v1/builds",

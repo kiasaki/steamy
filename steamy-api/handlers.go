@@ -16,6 +16,21 @@ func ApiIndex(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+type TokensCreateRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+func TokensCreate(w http.ResponseWriter, r *http.Request) {
+	var createRequest TokensCreateRequest
+	err := Bind(r, &createRequest)
+	if err != nil {
+		SetBadRequestResponse(w)
+		return
+	}
+
+}
+
 func BuildsIndex(w http.ResponseWriter, r *http.Request) {
 	SetOKResponse(w, J{})
 }
