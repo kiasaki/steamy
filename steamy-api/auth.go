@@ -1,11 +1,12 @@
 package main
 
 import (
+	"errors"
 	"net/http"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/gorilla/mux"
+	"github.com/gorilla/context"
 	"github.com/kiasaki/steamy/steamy-api/data"
 )
 
@@ -19,7 +20,9 @@ func createAuthToken(userId string, hoursOfValidity int) (string, error) {
 }
 
 func currentUser(r *http.Request) (*data.User, error) {
-	vars := mux.Vars(r)
-	userId := vars["currentUserId"]
-	return data.UsersFetchOne(userId)
+	user, ok := context.Get(r, "currentUser").(*data.User)
+	if !ok {
+		return user, errors.New("No current user for request")
+	}
+	return user, nil
 }

@@ -78,6 +78,7 @@ func V1CurrentUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	user.Password = ""
 	SetOKResponse(w, J{"data": user})
 }
 
