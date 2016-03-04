@@ -2,7 +2,7 @@ import 'isomorphic-fetch';
 
 import queryString from 'query-string';
 import { camelizeKeys, decamelizeKeys } from 'humps';
-import { push } from 'redux-router';
+import { push } from 'react-router-redux';
 
 const API_ROOT = window.env.root_url;
 

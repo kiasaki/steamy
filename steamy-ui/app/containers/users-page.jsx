@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { pushState } from 'redux-router';
 
 class UsersPage extends Component {
     render() {
@@ -10,7 +9,4 @@ class UsersPage extends Component {
     }
 }
 
-export default connect(
-    state => ({q: state.router.location.query.q}),
-    {pushState}
-)(UsersPage);
+export default connect()(UsersPage);

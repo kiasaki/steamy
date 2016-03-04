@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { pushState } from 'redux-router';
+import { push } from 'react-router-redux';
 import { fetchCurrentUser } from '../actions';
 
 class App extends Component {

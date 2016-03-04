@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'redux-router';
+import { push } from 'react-router-redux';
 import * as ActionTypes from '../actions';
 
 class DashboardPage extends Component {

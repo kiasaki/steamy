@@ -1,6 +1,6 @@
 import { merge, clone } from 'ramda';
 import { combineReducers } from 'redux';
-import { routerStateReducer } from 'redux-router';
+import { routerReducer } from 'react-router-redux';
 
 import { API_UPDATE } from '../lib/api-middleware';
 import * as ActionTypes from '../actions';
@@ -25,11 +25,12 @@ const entitiesReducerDefaultState = {
     users: {},
     hosts: {},
     builds: {},
+    tokens: {},
     projects: {},
     deployments: {},
     environments: {}
 };
-const entities = (state = {}, action) => {
+const entities = (state = entitiesReducerDefaultState, action) => {
     if (action.type === API_UPDATE) {
         const { entityType, id, response } = action;
 
@@ -54,7 +55,7 @@ const entities = (state = {}, action) => {
 };
 
 const rootReducer = combineReducers({
-    router: routerStateReducer,
+    routing: routerReducer,
     entities,
     authToken,
     authUser

@@ -1,6 +1,8 @@
+import * as ActionTypes from '../actions';
 import React, { Component } from 'react';
+import { STATUS_REQUEST, STATUS_SUCCESS, STATUS_FAILURE } from '../lib/api-middleware';
 import { connect } from 'react-redux';
-import { pushState } from 'redux-router';
+import { push } from 'react-router-redux';
 
 class SigninPage extends Component {
     constructor(params) {
@@ -9,12 +11,20 @@ class SigninPage extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        const status = nextProps.token.status;
+        console.log(status, nextProps);
+    }
+
     handleSubmit(event) {
         event.preventDefault();
-        console.log({
-            email: this.refs.email.value,
-            password: this.refs.password.value,
-        });
+
+        const email = this.refs.email.value;
+        const password = this.refs.password.value;
+
+        this.props.dispatch(ActionTypes.tokensCreate(
+            email, password
+        ));
     }
 
     render() {
@@ -39,4 +49,10 @@ class SigninPage extends Component {
     }
 }
 
-export default connect()(SigninPage);
+const mapStateToProps = state => {
+    const token = state.entities.tokens.login;
+    console.log(token);
+    return { token };
+};
+
+export default connect(mapStateToProps)(SigninPage);

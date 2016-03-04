@@ -1,4 +1,4 @@
-import { push } from 'redux-router';
+import { push } from 'react-router-redux';
 
 import { getPersistedToken } from '../lib/auth';
 import { CALL_API } from '../lib/api-middleware';
@@ -12,6 +12,18 @@ export function fetchCurrentUser() {
             entityType: 'users',
             id: 'current',
             endpoint: '/v1/current-user'
+        }
+    };
+}
+
+export function tokensCreate(email, password) {
+    return {
+        [CALL_API]: {
+            entityType: 'tokens',
+            id: 'login',
+            method: 'POST',
+            endpoint: '/v1/tokens',
+            body: {email, password}
         }
     };
 }
