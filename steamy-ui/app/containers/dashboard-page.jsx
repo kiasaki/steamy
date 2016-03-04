@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'redux-router';
+import * as ActionTypes from '../actions';
 
 class DashboardPage extends Component {
     componentDidMount() {
-        if (!this.props.authUser) {
-            this.props.dispatch(push('/signin'));
-        }
+        this.props.dispatch(ActionTypes.fetchCurrentUser());
     }
     render() {
         return <div>Dashboard</div>;
