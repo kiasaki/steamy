@@ -5,6 +5,9 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/kiasaki/steamy/steamy-api/data"
+	"github.com/kiasaki/steamy/steamy-api/util"
 )
 
 func ApiIndex(w http.ResponseWriter, r *http.Request) {
@@ -55,10 +58,10 @@ func BuildsCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	project, err := ProjectsFetchOneByTitle(r.PostFormValue("project"))
+	project, err := data.ProjectsFetchOneByTitle(r.PostFormValue("project"))
 	if err != nil {
 		SetInternalServerErrorResponse(w, err)
-	} else if project == ProjectNotFound {
+	} else if project == data.ProjectNotFound {
 		SetNotFoundResponse(w)
 		WriteEntity(w, J{"error": "Project not found"})
 	}
@@ -72,7 +75,7 @@ func BuildsCreate(w http.ResponseWriter, r *http.Request) {
 	defer file.Close()
 
 	// Decide on new build id
-	var buildId = NewUUID().String()
+	var buildId = util.NewUUID().String()
 
 	// Save artifact to disk
 	var newFilePath = buildArtifactPath(buildId)
@@ -87,7 +90,7 @@ func BuildsCreate(w http.ResponseWriter, r *http.Request) {
 	io.Copy(newFile, file)
 
 	// Create build
-	var build = &Build{
+	var build = &data.Build{
 		Id:         buildId,
 		Version:    r.PostFormValue("version"),
 		ProjectId:  project.Id,
@@ -98,7 +101,7 @@ func BuildsCreate(w http.ResponseWriter, r *http.Request) {
 		Publisher:  r.PostFormValue("publisher"),
 		Created:    time.Now(),
 	}
-	err = DbBuildsCreate(build)
+	err = data.DbBuildsCreate(build)
 	if err != nil {
 		SetInternalServerErrorResponse(w, err)
 		WriteEntity(w, J{"error": "Error saving build to database"})

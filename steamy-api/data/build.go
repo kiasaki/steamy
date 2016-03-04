@@ -1,4 +1,4 @@
-package main
+package data
 
 import "time"
 
@@ -15,10 +15,6 @@ type Build struct {
 }
 
 type Builds []Build
-
-func buildArtifactPath(buildId string) string {
-	return configBuildsDir + "/" + buildId + ".tar.gz"
-}
 
 const buildsSqlParams = "id, version, project_id, repo_url, repo_name, repo_branch, repo_commit, publisher, created"
 

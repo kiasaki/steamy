@@ -78,3 +78,7 @@ func WriteEntity(res http.ResponseWriter, entity interface{}) error {
 	fmt.Fprint(res, body)
 	return nil
 }
+
+func buildArtifactPath(buildId string) string {
+	return configBuildsDir + "/" + buildId + ".tar.gz"
+}

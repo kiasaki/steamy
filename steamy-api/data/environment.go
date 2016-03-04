@@ -1,4 +1,4 @@
-package main
+package data
 
 type Environment struct {
 	Id        string `json:"id"`

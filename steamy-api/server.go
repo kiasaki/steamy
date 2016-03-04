@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/kiasaki/steamy/steamy-api/data"
 )
 
 var configPort int
@@ -22,7 +24,7 @@ func init() {
 func main() {
 	flag.Parse()
 
-	err := DbInit(configDatabaseUrl)
+	err := data.DbInit(configDatabaseUrl)
 	if err != nil {
 		log.Fatal(err)
 	}
