@@ -11,7 +11,12 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func ApiIndex(w http.ResponseWriter, r *http.Request) {
+func notFound(w http.ResponseWriter, r *http.Request) {
+	SetNotFoundResponse(w)
+	WriteEntity(w, J{"error": "Page not found"})
+}
+
+func V1ApiIndex(w http.ResponseWriter, r *http.Request) {
 	SetOKResponse(w, J{
 		"data": J{
 			"version": "v1",
@@ -25,7 +30,7 @@ type TokensCreateRequest struct {
 	Password string `json:"password"`
 }
 
-func TokensCreate(w http.ResponseWriter, r *http.Request) {
+func V1TokensCreate(w http.ResponseWriter, r *http.Request) {
 	var createRequest TokensCreateRequest
 	err := Bind(r, &createRequest)
 	if err != nil {
@@ -64,6 +69,16 @@ func TokensCreate(w http.ResponseWriter, r *http.Request) {
 	SetOKResponse(w, J{
 		"data": J{"token": authToken},
 	})
+}
+
+func V1CurrentUser(w http.ResponseWriter, r *http.Request) {
+	user, err := currentUser(r)
+	if err != nil {
+		SetInternalServerErrorResponse(w, err)
+		return
+	}
+
+	SetOKResponse(w, J{"data": user})
 }
 
 func BuildsIndex(w http.ResponseWriter, r *http.Request) {

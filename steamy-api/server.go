@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/kiasaki/steamy/steamy-api/data"
+	"github.com/rs/cors"
 )
 
 var configPort int
@@ -31,8 +32,18 @@ func main() {
 		log.Fatal(err)
 	}
 
-	router := NewRouter()
+	handler := addCORSMiddleware(NewRouter())
+
 	var stringPort = strconv.Itoa(configPort)
 	log.Println("listening on port: " + stringPort)
-	log.Fatal(http.ListenAndServe(":"+stringPort, router))
+	log.Fatal(http.ListenAndServe(":"+stringPort, handler))
+}
+
+func addCORSMiddleware(handler http.Handler) http.Handler {
+	c := cors.New(cors.Options{
+		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE"},
+		AllowedHeaders:   []string{"Authorization", "X-Api-Token", "Api-Token"},
+		AllowCredentials: true,
+	})
+	return c.Handler(handler)
 }
