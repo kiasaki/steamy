@@ -12,12 +12,14 @@ import (
 var configPort int
 var configDatabaseUrl string
 var configToken string
+var configSecret string
 var configBuildsDir string
 
 func init() {
 	flag.IntVar(&configPort, "port", 9484, "Port to listen on")
-	flag.StringVar(&configDatabaseUrl, "database-url", "postgres://localhost/steamy", "Database connection string")
-	flag.StringVar(&configToken, "token", "keyboardcat", "Secret API Token")
+	flag.StringVar(&configDatabaseUrl, "database-url", "postgres://localhost/steamy?sslmode=disable", "Database connection string")
+	flag.StringVar(&configToken, "token", "keyboardcat", "Global all-access API Token")
+	flag.StringVar(&configSecret, "secret", "ghostintheshell", "Secret used to sign/verify JWT tokens")
 	flag.StringVar(&configBuildsDir, "builds-dir", "./builds", "Directory to store uploaded build artifacts in")
 }
 

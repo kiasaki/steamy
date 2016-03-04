@@ -40,20 +40,26 @@ func UsersFetchList() (*Users, error) {
 	return &users, err
 }
 
-func UsersFetchOne(id string) (*User, error) {
-	var user User
-	var query = `SELECT id, email, password, created FROM users WHERE id = $1`
-	row := DbQueryRow(query, id)
-	err := row.Scan(&user.Id, &user.Email, &user.Password, &user.Created)
+func MakeUsersFetchOne(fieldName string) func(string) (*User, error) {
+	return func(value string) (*User, error) {
+		var e User
+		var query = `SELECT id, email, password, created FROM users WHERE ` + fieldName + ` = $1`
+		row := DbQueryRow(query, value)
+		err := row.Scan(&e.Id, &e.Email, &e.Password, &e.Created)
 
-	switch {
-	case err == sql.ErrNoRows:
-		return UserNotFound, nil
-	default:
-		return &user, err
+		switch {
+		case err == sql.ErrNoRows:
+			return UserNotFound, nil
+		default:
+			return &e, err
+		}
 	}
-
 }
+
+var UsersFetchOne = MakeUsersFetchOne("id")
+var UsersFetchOneByEmail = MakeUsersFetchOne("email")
+
+// Use GenerateFromPassword for new password
 
 func UsersCreate(user *User) error {
 	var query = `INSERT INTO users (id, email, password, created) VALUES ($1, $2, $3, $4)`

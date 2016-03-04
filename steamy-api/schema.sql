@@ -2,6 +2,7 @@ CREATE TABLE users (
     id uuid NOT NULL,
     email text NOT NULL,
     password text NOT NULL,
+    api_token text NOT NULL,
     deleted bool NOT NULL DEFAULT false,
     created timestamp NOT NULL,
     PRIMARY KEY (id),
@@ -12,12 +13,20 @@ CREATE TABLE users (
 CREATE TABLE projects (
     id uuid NOT NULL,
     title text NOT NULL,
-    hosts text[] NOT NULL,
-    groups text[] NOT NULL,
     created timestamp NOT NULL,
     updated timestamp NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT projects_id UNIQUE (id)
+);
+
+CREATE TABLE environments (
+    id uuid NOT NULL,
+    title text NOT NULL,
+    hosts text[] NOT NULL,
+    groups text[] NOT NULL,
+    project_id uuid NOT NULL REFERENCES projects (id),
+    PRIMARY KEY (id),
+    CONSTRAINT environments_id UNIQUE (id)
 );
 
 CREATE TABLE builds (
@@ -32,14 +41,6 @@ CREATE TABLE builds (
     created timestamp NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT builds_id UNIQUE (id)
-);
-
-CREATE TABLE environments (
-    id uuid NOT NULL,
-    title text NOT NULL,
-    project_id uuid NOT NULL REFERENCES projects (id),
-    PRIMARY KEY (id),
-    CONSTRAINT environments_id UNIQUE (id)
 );
 
 CREATE TABLE hosts (

@@ -8,6 +8,7 @@ import (
 
 	"github.com/kiasaki/steamy/steamy-api/data"
 	"github.com/kiasaki/steamy/steamy-api/util"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func ApiIndex(w http.ResponseWriter, r *http.Request) {
@@ -29,9 +30,40 @@ func TokensCreate(w http.ResponseWriter, r *http.Request) {
 	err := Bind(r, &createRequest)
 	if err != nil {
 		SetBadRequestResponse(w)
+		WriteEntity(w, J{"error": "Error reading request entity"})
 		return
 	}
 
+	// Fetch user
+	user, err := data.UsersFetchOneByEmail(createRequest.Email)
+	if err != nil {
+		SetInternalServerErrorResponse(w, err)
+		return
+	} else if user == data.UserNotFound {
+		SetBadRequestResponse(w)
+		WriteEntity(w, J{"error": "Email or password entered is incorrect"})
+		return
+	}
+
+	// Compare passwords
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(createRequest.Password))
+	if err != nil {
+		SetBadRequestResponse(w)
+		WriteEntity(w, J{"error": "Email or password entered is incorrect"})
+		return
+	}
+
+	// Password matches, let's give the requester a token :D
+	// Valid 1 week
+	authToken, err := createAuthToken(user.Id, 7*24)
+	if err != nil {
+		SetInternalServerErrorResponse(w, err)
+		return
+	}
+
+	SetOKResponse(w, J{
+		"data": J{"token": authToken},
+	})
 }
 
 func BuildsIndex(w http.ResponseWriter, r *http.Request) {
