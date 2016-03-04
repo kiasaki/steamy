@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { STATUS_REQUEST, STATUS_SUCCESS, STATUS_FAILURE } from '../lib/api-middleware';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import { setPersistedToken } from '../lib/auth';
 
 class SigninPage extends Component {
     constructor(params) {
@@ -12,8 +13,14 @@ class SigninPage extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const status = nextProps.token.status;
-        console.log(status, nextProps);
+        const { dispatch } = nextProps;
+        const { status, data } = (nextProps.token || {});
+
+        if (status === STATUS_SUCCESS) {
+            setPersistedToken(data.token);
+            dispatch(ActionTypes.setAuthToken(data.token));
+            dispatch(push('/'));
+        }
     }
 
     handleSubmit(event) {
@@ -28,11 +35,19 @@ class SigninPage extends Component {
     }
 
     render() {
+        const { status, error } = (this.props.token || {});
+
         return (
             <div className="signin">
                 <div className="signin__inner">
                     <h1 className="text-center">Steamy</h1>
                     <form onSubmit={this.handleSubmit}>
+                        {status === STATUS_FAILURE ? (
+                             <div className="alert alert--error">
+                                 {error}
+                             </div>
+                        ) : null}
+                        
                         <label>Email</label>
                         <input type="text" ref="email" />
 
@@ -51,8 +66,7 @@ class SigninPage extends Component {
 
 const mapStateToProps = state => {
     const token = state.entities.tokens.login;
-    console.log(token);
-    return { token };
+    return {token};
 };
 
 export default connect(mapStateToProps)(SigninPage);

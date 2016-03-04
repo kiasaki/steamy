@@ -3,8 +3,18 @@ import { push } from 'react-router-redux';
 import { getPersistedToken } from '../lib/auth';
 import { CALL_API } from '../lib/api-middleware';
 
+export function createSimpleActionCreator(type, key) {
+    return (value) => {
+        return {
+            type,
+            [key]: value
+        };
+    };
+}
+
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
-export const SET_AUTH_USER = 'SET_AUTH_USER';
+export const setAuthToken = createSimpleActionCreator(SET_AUTH_TOKEN, 'authToken');
+
 
 export function fetchCurrentUser() {
     return {

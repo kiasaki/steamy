@@ -1,4 +1,4 @@
-import { merge, clone } from 'ramda';
+import { merge, clone, map, fromPairs } from 'ramda';
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
@@ -7,19 +7,19 @@ import * as ActionTypes from '../actions';
 
 function createReducer(type, paramName, deflt) {
     return function (state, action) {
-        state = state || deflt;
-
         switch (action.type) {
         case type:
             return action[paramName];
         default:
+            if (typeof state === 'undefined') {
+                return deflt;
+            }
             return state;
         }
     };
 }
 
-const authToken = createReducer(ActionTypes.SET_AUTH_TOKEN, 'authUser', null);
-const authUser = createReducer(ActionTypes.SET_AUTH_USER, 'authToken', null);
+const authToken = createReducer(ActionTypes.SET_AUTH_TOKEN, 'authToken', null);
 
 const entitiesReducerDefaultState = {
     users: {},
@@ -35,20 +35,20 @@ const entities = (state = entitiesReducerDefaultState, action) => {
         const { entityType, id, response } = action;
 
         if ('data' in response && Array.isArray(response.data)) {
-            for (const entity in response.data) {
-                const entityResponse = clone(response);
-                entityResponse.data = entity;
-                state[entityType] = merge(state[entityType], {
-                    [id]: entityResponse
-                });
-            }
-        } else {
-            state[entityType] = merge(state[entityType], {
-                [id]: response
+            return merge(state, {
+                [entityType]: merge(state[entityType], fromPairs(map(response.data, entity => {
+                    const entityResponse = clone(response);
+                    entityResponse.data = entity;
+                    return [id, entityResponse];
+                })))
             });
         }
 
-        return state;
+        return merge(state, {
+            [entityType]: merge(state[entityType], {
+                [id]: response
+            })
+        });
     }
 
     return state;
@@ -57,8 +57,7 @@ const entities = (state = entitiesReducerDefaultState, action) => {
 const rootReducer = combineReducers({
     routing: routerReducer,
     entities,
-    authToken,
-    authUser
+    authToken
 });
 
 export default rootReducer;

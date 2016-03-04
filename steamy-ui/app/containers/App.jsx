@@ -14,7 +14,7 @@ class App extends Component {
 
     ensureCurrentUser(props) {
         // Load user if we have a token and it's missing
-        if (props.authToken && !props.authUser) {
+        if (props.authToken && !props.currentUser) {
             props.dispatch(fetchCurrentUser());
         }
     }
@@ -57,8 +57,10 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-    const { authToken, authUser } = state;
-    return {authToken, authUser};
+    const { authToken, entities } = state;
+    const currentUser = entities.users.current;
+
+    return {authToken, currentUser};
 };
 
 export default connect(mapStateToProps)(App);

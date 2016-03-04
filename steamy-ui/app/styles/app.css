@@ -18,6 +18,16 @@ body, html {
     text-align: center;
 }
 
+.alert {
+    font-size: 1.4rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+.alert--error {
+    background: #ec583b;
+    color: #fff;
+}
+
 /* Header */
 .page-header {
     background: #fff;
