@@ -44,6 +44,13 @@ var routes = Routes{
 		V1CurrentUser,
 	},
 	Route{
+		"V1ProjectsShow",
+		"GET",
+		"/v1/projects/{id}",
+		false,
+		V1ProjectsShow,
+	},
+	Route{
 		"V1ProjectsCreate",
 		"POST",
 		"/v1/projects",

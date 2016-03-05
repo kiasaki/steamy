@@ -83,6 +83,22 @@ func V1CurrentUser(w http.ResponseWriter, r *http.Request) {
 	SetOKResponse(w, J{"data": user})
 }
 
+func V1ProjectsShow(w http.ResponseWriter, r *http.Request) {
+	var id = PathString(r, "id")
+
+	project, err := data.ProjectsFetchOne(id)
+	if err != nil {
+		SetInternalServerErrorResponse(w, err)
+		return
+	}
+	if project == data.ProjectNotFound {
+		SetNotFoundResponse(w)
+		WriteEntity(w, J{"error": "Can't find project"})
+	}
+
+	SetOKResponse(w, J{"data": project})
+}
+
 func V1ProjectsCreate(w http.ResponseWriter, r *http.Request) {
 	var project = &data.Project{}
 	err := Bind(r, project)
