@@ -30,37 +30,33 @@ class App extends Component {
         return (
             <div>
                 <header className="page-header">
-                    <div className="container">
-                        <div className="row">
-                            <div className="six columns">
-                                <span className="page-header__title">Steamy</span>
-                                <a href="/">
-                                    Dashboard
-                                </a>
-                                <a href="/projects">
-                                    Projects
-                                </a>
-                                <a href="/hosts">
-                                    Hosts
-                                </a>
-                                <a href="/users">
-                                    Users
-                                </a>
-                            </div>
-                            <div className="six columns text-right">
-                                <span>
-                                    {email}
-                                </span>
-                                <a href="/signout">
-                                    Signout
-                                </a>
-                            </div>
+                    <div className="container cf">
+                        <div className="pull-left">
+                            <span className="page-header__title">Steamy</span>
+                            <a href="/">
+                                Dashboard
+                            </a>
+                            <a href="/projects">
+                                Projects
+                            </a>
+                            <a href="/hosts">
+                                Hosts
+                            </a>
+                            <a href="/users">
+                                Users
+                            </a>
+                        </div>
+                        <div className="pull-right">
+                            <span>
+                                {email}
+                            </span>
+                            <a href="/signout">
+                                Signout
+                            </a>
                         </div>
                     </div>
                 </header>
-                <div className="container">
-                    {this.props.children}
-                </div>
+                {this.props.children}
             </div>
         );
     }
@@ -69,7 +65,6 @@ class App extends Component {
 const mapStateToProps = state => {
     const { authToken, entities } = state;
     const currentUser = entities.users.current;
-    console.log(currentUser);
 
     return {authToken, currentUser};
 };

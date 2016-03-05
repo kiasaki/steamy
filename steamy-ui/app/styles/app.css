@@ -28,12 +28,29 @@ body, html {
     color: #fff;
 }
 
+.empty-state {
+    border: 4px dashed #bbb;
+    margin: 2em 0;
+    padding: 6em 2em;
+    text-align: center;
+}
+.empty-state h1 {
+    font-size: 2.6rem;
+    font-weight: normal;
+    color: #888;
+}
+.empty-state span {
+    font-size: 2.0rem;
+}
+
 /* Header */
 .page-header {
     background: #7F2BFF;
     box-shadow: 0 0 3px rgba(0,0,0,0.25);
     padding: 0.6em 0;
     color: #fff;
+    position: relative;
+    z-index: 1;
 }
 .page-header__title {
     font-size: 1.25em;
@@ -49,6 +66,46 @@ body, html {
 .page-header a:hover {
     background: rgba(255,255,255,0.25);
 }
+.page-header span {
+    display: inline-block;
+    margin-right: 1em;
+}
+
+/* Navigation */
+.page-navigation {
+    background: #fff;
+    box-shadow: 0 0 3px rgba(0,0,0,0.25);
+    padding: 0.6em 0;
+}
+.page-navigation__title {
+    font-size: 1.1em;
+    line-height: 1.6em;
+    margin-right: 1em;
+}
+.page-navigation a {
+    line-height: 2em;
+    display: inline-block;
+    padding: 0 0.5em;
+    color: #7F2BFF;
+}
+.page-navigation a:hover {
+    background: rgba(0,0,0,0.15);
+}
+
+.box {
+    background: #fff;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.25);
+    margin: 2.5rem 0;
+    padding: 1.5em;
+}
+.box form:last-child {
+    margin-bottom: 0;
+}
+
+form button {
+    display: block;
+}
+
 
 /* Signin */
 .signin {

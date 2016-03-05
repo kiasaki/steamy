@@ -6,11 +6,13 @@ import DashboardPage from './containers/dashboard-page.jsx';
 import SigninPage from './containers/signin-page.jsx';
 import SignoutPage from './containers/signout-page.jsx';
 import UsersPage from './containers/users-page.jsx';
+import ProjectsCreatePage from './containers/projects-create-page.jsx';
 
 export default (
     <Route path="/" component={App}>
         <IndexRoute component={DashboardPage} />
         <Route path="users" component={UsersPage} />
+        <Route path="projects/create" component={ProjectsCreatePage} />
         <Route path="signin" component={SigninPage} />
         <Route path="signout" component={SignoutPage} />
     </Route>
