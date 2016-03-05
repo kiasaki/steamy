@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -80,6 +81,36 @@ func V1CurrentUser(w http.ResponseWriter, r *http.Request) {
 
 	user.Password = ""
 	SetOKResponse(w, J{"data": user})
+}
+
+func V1ProjectsCreate(w http.ResponseWriter, r *http.Request) {
+	var project = &data.Project{}
+	err := Bind(r, project)
+	if err != nil {
+		fmt.Println(err)
+		SetBadRequestResponse(w)
+		WriteEntity(w, J{"error": "Error reading request entity"})
+		return
+	}
+
+	if len(project.Title) <= 0 {
+		SetBadRequestResponse(w)
+		WriteEntity(w, J{"error": "Title is a required field"})
+		return
+	}
+
+	project.Id = util.NewUUID().String()
+	project.Created = time.Now()
+	project.Updated = time.Now()
+
+	err = data.ProjectsCreate(project)
+	if err != nil {
+		SetInternalServerErrorResponse(w, err)
+		WriteEntity(w, J{"error": "Error saving project to database"})
+		return
+	}
+
+	SetOKResponse(w, J{"data": project})
 }
 
 func BuildsIndex(w http.ResponseWriter, r *http.Request) {
