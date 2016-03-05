@@ -36,3 +36,9 @@ func MakeProjectsFetchOne(fieldName string) func(string) (*Project, error) {
 
 var ProjectsFetchOne = MakeProjectsFetchOne("id")
 var ProjectsFetchOneByTitle = MakeProjectsFetchOne("title")
+
+func ProjectsCreate(e *Project) error {
+	var query = `INSERT INTO projects (` + projectSqlParams + `) VALUES ($1, $2, $3, $4)`
+	_, err := DbExec(query, e.Id, e.Title, e.Created, e.Updated)
+	return err
+}

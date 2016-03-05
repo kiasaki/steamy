@@ -48,3 +48,26 @@ export function tokensCreate(email, password) {
         }
     };
 }
+
+export function projectsCreate(title) {
+    return {
+        [CALL_API]: {
+            entityType: 'projects',
+            id: 'created',
+            method: 'POST',
+            endpoint: '/v1/projects',
+            body: {title}
+        }
+    };
+}
+
+export function projectsFetchOne(id) {
+    return {
+        [CALL_API]: {
+            id,
+            entityType: 'projects',
+            method: 'GET',
+            endpoint: `/v1/projects/${id}`
+        }
+    };
+}

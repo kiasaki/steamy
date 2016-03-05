@@ -39,7 +39,7 @@ const entities = (state = entitiesReducerDefaultState, action) => {
                 [entityType]: merge(state[entityType], fromPairs(map(response.data, entity => {
                     const entityResponse = clone(response);
                     entityResponse.data = entity;
-                    return [id, entityResponse];
+                    return [entity.id, entityResponse];
                 })))
             });
         }
