@@ -43,6 +43,7 @@ var routes = Routes{
 		false,
 		V1CurrentUser,
 	},
+
 	Route{
 		"V1ProjectsShow",
 		"GET",
@@ -51,12 +52,20 @@ var routes = Routes{
 		V1ProjectsShow,
 	},
 	Route{
+		"V1ProjectsIndex",
+		"GET",
+		"/v1/projects/",
+		false,
+		V1ProjectsIndex,
+	},
+	Route{
 		"V1ProjectsCreate",
 		"POST",
 		"/v1/projects",
 		false,
 		V1ProjectsCreate,
 	},
+
 	Route{
 		"V1BuildsIndex",
 		"GET",

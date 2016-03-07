@@ -13,8 +13,12 @@ class ProjectsCreatePage extends Component {
     }
 
     componentDidMount() {
+        const { dispatch, currentUser } = this.props;
+
         // Ensure auth
-        this.props.dispatch(ActionTypes.fetchCurrentUser());
+        if (!currentUser) {
+            dispatch(ActionTypes.fetchCurrentUser());
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -69,10 +73,11 @@ class ProjectsCreatePage extends Component {
 }
 
 const mapStateToProps = state => {
-    return {
-        authUser: state.authUser,
-        project: state.entities.projects.created || {}
-    };
+    const { authToken, entities } = state;
+    const currentUser = entities.users.current;
+    const project = entities.projects.created || {};
+
+    return {currentUser, project};
 };
 
 export default connect(mapStateToProps)(ProjectsCreatePage);

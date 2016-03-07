@@ -49,6 +49,29 @@ export function tokensCreate(email, password) {
     };
 }
 
+export function projectsFetchOne(id) {
+    return {
+        [CALL_API]: {
+            id,
+            entityType: 'projects',
+            method: 'GET',
+            endpoint: `/v1/projects/${id}`
+        }
+    };
+}
+
+export function projectsFetchList(params) {
+    return {
+        [CALL_API]: {
+            id: 'list',
+            entityType: 'projects',
+            method: 'GET',
+            endpoint: `/v1/projects/`,
+            params
+        }
+    };
+}
+
 export function projectsCreate(title) {
     return {
         [CALL_API]: {
@@ -57,17 +80,6 @@ export function projectsCreate(title) {
             method: 'POST',
             endpoint: '/v1/projects',
             body: {title}
-        }
-    };
-}
-
-export function projectsFetchOne(id) {
-    return {
-        [CALL_API]: {
-            id,
-            entityType: 'projects',
-            method: 'GET',
-            endpoint: `/v1/projects/${id}`
         }
     };
 }

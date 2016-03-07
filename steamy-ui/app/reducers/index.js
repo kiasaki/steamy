@@ -35,12 +35,14 @@ const entities = (state = entitiesReducerDefaultState, action) => {
         const { entityType, id, response } = action;
 
         if ('data' in response && Array.isArray(response.data)) {
+            const entities = fromPairs(map(entity => {
+                const entityResponse = clone(response);
+                entityResponse.data = entity;
+                return [entity.id, entityResponse];
+            }, response.data));
+
             return merge(state, {
-                [entityType]: merge(state[entityType], fromPairs(map(response.data, entity => {
-                    const entityResponse = clone(response);
-                    entityResponse.data = entity;
-                    return [entity.id, entityResponse];
-                })))
+                [entityType]: merge(state[entityType], entities)
             });
         }
 

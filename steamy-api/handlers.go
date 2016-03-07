@@ -99,6 +99,16 @@ func V1ProjectsShow(w http.ResponseWriter, r *http.Request) {
 	SetOKResponse(w, J{"data": project})
 }
 
+func V1ProjectsIndex(w http.ResponseWriter, r *http.Request) {
+	projects, err := data.ProjectsFetchList()
+	if err != nil {
+		SetInternalServerErrorResponse(w, err)
+		return
+	}
+
+	SetOKResponse(w, J{"data": projects})
+}
+
 func V1ProjectsCreate(w http.ResponseWriter, r *http.Request) {
 	var project = &data.Project{}
 	err := Bind(r, project)

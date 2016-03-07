@@ -18,6 +18,29 @@ var ProjectNotFound = &Project{}
 
 var projectSqlParams = "id, title, created, updated"
 
+func ProjectsFetchList() (*Projects, error) {
+	var entities Projects
+	var query = `SELECT ` + projectSqlParams + ` FROM projects`
+	rows, err := DbQuery(query)
+	if err != nil {
+		return &entities, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var e Project
+		err := rows.Scan(&e.Id, &e.Title, &e.Created, &e.Updated)
+		if err != nil {
+			return &entities, err
+		}
+		entities = append(entities, e)
+	}
+
+	err = rows.Err()
+	return &entities, err
+}
+
 func MakeProjectsFetchOne(fieldName string) func(string) (*Project, error) {
 	return func(field string) (*Project, error) {
 		var e Project
