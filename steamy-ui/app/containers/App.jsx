@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import { Link } from 'react-router';
+
 import { fetchCurrentUser } from '../actions';
 
 class App extends Component {
@@ -33,26 +35,23 @@ class App extends Component {
                     <div className="container cf">
                         <div className="pull-left">
                             <span className="page-header__title">Steamy</span>
-                            <a href="/">
-                                Dashboard
-                            </a>
-                            <a href="/projects">
+                            <Link to="/">
                                 Projects
-                            </a>
-                            <a href="/hosts">
+                            </Link>
+                            <Link to="/hosts">
                                 Hosts
-                            </a>
-                            <a href="/users">
+                            </Link>
+                            <Link to="/users">
                                 Users
-                            </a>
+                            </Link>
                         </div>
                         <div className="pull-right">
                             <span>
                                 {email}
                             </span>
-                            <a href="/signout">
+                            <Link to="/signout">
                                 Signout
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </header>

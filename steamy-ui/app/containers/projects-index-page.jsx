@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import SimpleNav from '../components/simple-nav.jsx';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import * as ActionTypes from '../actions';
+import { Link } from 'react-router';
 
-class DashboardPage extends Component {
+import * as ActionTypes from '../actions';
+import SimpleNav from '../components/simple-nav.jsx';
+
+class ProjectsIndexPage extends Component {
     componentDidMount() {
         this.props.dispatch(ActionTypes.fetchCurrentUser());
     }
+
     render() {
         return (
             <div>
@@ -16,7 +19,9 @@ class DashboardPage extends Component {
                 <div className="container">
                     <div className="empty-state">
                         <h1>You have no projects yet!</h1>
-                        <span><a href="/projects/create">Create one!</a></span>
+                        <span>
+                            <Link to="/projects/create">Create one!</Link>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -30,4 +35,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps)(DashboardPage);
+export default connect(mapStateToProps)(ProjectsIndexPage);

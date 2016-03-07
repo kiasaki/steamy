@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 
 class SimpleNav extends Component {
     render() {
@@ -11,12 +12,12 @@ class SimpleNav extends Component {
                         </span>
                     </div>
                     <div className="pull-right">
-                        <a href="/projects/create">
+                        <Link to="/projects/create">
                             + New Project
-                        </a>
-                        <a href="/users/create">
+                        </Link>
+                        <Link to="/users/create">
                             + New User
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </nav>

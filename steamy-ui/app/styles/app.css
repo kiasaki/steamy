@@ -71,6 +71,7 @@ body, html {
     margin-right: 1em;
 }
 
+
 /* Navigation */
 .page-navigation {
     background: #fff;
@@ -135,3 +136,20 @@ form button {
     color: #7F2BFF;
     border-color: #7F2BFF;
 }
+
+/* Not found */
+.not-found {
+    text-align: center;
+}
+.not-found h1 {
+    margin: 14rem 0 0;
+    font-size: 4.8rem;
+    font-weight: 300;
+}
+.not-found h2 {
+    margin: 3rem 0 0;
+    font-size: 2.8rem;
+    font-weight: bold;
+}
+    
+
