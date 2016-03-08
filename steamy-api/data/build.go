@@ -1,28 +1,30 @@
 package data
 
-import "time"
+import (
+	"strings"
+	"time"
+)
 
 type Build struct {
-	Id         string    `json:"id"`
-	Version    string    `json:"version"`
-	ProjectId  string    `json:"project_id"`
-	RepoUrl    string    `json:"repo_url"`
-	RepoName   string    `json:"repo_name"`
-	RepoBranch string    `json:"repo_branch"`
-	RepoCommit string    `json:"repo_commit"`
-	Publisher  string    `json:"publisher"`
-	Created    time.Time `json:"created"`
+	Id         string    `json:"id" db:"id"`
+	Version    string    `json:"version" db:"version"`
+	ProjectId  string    `json:"project_id" db:"project_id"`
+	RepoUrl    string    `json:"repo_url" db:"repo_url"`
+	RepoName   string    `json:"repo_name" db:"repo_name"`
+	RepoBranch string    `json:"repo_branch" db:"repo_branch"`
+	RepoCommit string    `json:"repo_commit" db:"repo_commit"`
+	Publisher  string    `json:"publisher" db:"publisher"`
+	Created    time.Time `json:"created" db:"created"`
 }
 
 type Builds []Build
 
-const buildsSqlParams = "id, version, project_id, repo_url, repo_name, repo_branch, repo_commit, publisher, created"
+var buildsColumns = []string{
+	"id", "version", "project_id", "repo_url", "repo_name", "repo_branch", "repo_commit", "publisher", "created",
+}
 
-func DbBuildsCreate(b *Build) error {
-	var query = `INSERT INTO builds (` + buildsSqlParams + `) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`
-	_, err := DbExec(
-		query, b.Id, b.Version, b.ProjectId, b.RepoUrl, b.RepoName,
-		b.RepoBranch, b.RepoCommit, b.Publisher, b.Created,
-	)
+func BuildsCreate(entity *Build) error {
+	var query = "INSERT INTO builds (" + strings.Join(buildsColumns, ",") + ") VALUES (:" + strings.Join(buildsColumns, ",:") + ")"
+	_, err := DbGet().NamedExec(query, entity)
 	return err
 }

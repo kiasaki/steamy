@@ -149,7 +149,7 @@ func BuildsCreate(w http.ResponseWriter, r *http.Request) {
 		Publisher:  r.PostFormValue("publisher"),
 		Created:    time.Now(),
 	}
-	err = data.DbBuildsCreate(build)
+	err = data.BuildsCreate(build)
 	if err != nil {
 		SetInternalServerErrorResponse(w, err)
 		WriteEntity(w, J{"error": "Error saving build to database"})

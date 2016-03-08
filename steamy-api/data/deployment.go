@@ -20,14 +20,14 @@ const (
 )
 
 type Deployment struct {
-	Id            string           `json:"id"`
-	BuildId       string           `json:"build_id"`
-	ProjectId     string           `json:"project_id"`
-	EnvironmentId string           `json:"environment_id"`
-	Kind          DeploymentKind   `json:"kind"`
-	Status        DeploymentStatus `json:"status"`
-	Created       time.Time        `json:"created"`
-	Updated       time.Time        `json:"updated"`
+	Id            string           `json:"id" db:"id"`
+	BuildId       string           `json:"build_id" db:"build_id"`
+	ProjectId     string           `json:"project_id" db:"project_id"`
+	EnvironmentId string           `json:"environment_id" db:"environment_id"`
+	Kind          DeploymentKind   `json:"kind" db:"kind"`
+	Status        DeploymentStatus `json:"status" db:"status"`
+	Created       time.Time        `json:"created" db:"created"`
+	Updated       time.Time        `json:"updated" db:"updated"`
 }
 
 type Deployments []Deployment

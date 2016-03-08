@@ -1,67 +1,65 @@
 package data
 
 import (
-	"database/sql"
+	"strings"
 	"time"
 )
 
 type Project struct {
-	Id      string    `json:"id"`
-	Title   string    `json:"title"`
-	Created time.Time `json:"created"`
-	Updated time.Time `json:"updated"`
+	Id      string    `json:"id" db:"id"`
+	Title   string    `json:"title" db:"title"`
+	Created time.Time `json:"created" db:"created"`
+	Updated time.Time `json:"updated" db:"updated"`
 }
 
 type Projects []Project
 
 var ProjectNotFound = &Project{}
 
-var projectSqlParams = "id, title, created, updated"
+var projectsColumns = []string{"id", "title", "created", "updated"}
 
 func ProjectsFetchList() (*Projects, error) {
-	var entities Projects
-	var query = `SELECT ` + projectSqlParams + ` FROM projects`
-	rows, err := DbQuery(query)
-	if err != nil {
-		return &entities, err
-	}
+	var entities = Projects{}
+	var query = "SELECT " + strings.Join(projectsColumns, ",") + " FROM projects"
 
-	defer rows.Close()
-
-	for rows.Next() {
-		var e Project
-		err := rows.Scan(&e.Id, &e.Title, &e.Created, &e.Updated)
-		if err != nil {
-			return &entities, err
-		}
-		entities = append(entities, e)
-	}
-
-	err = rows.Err()
-	return &entities, err
+	return &entities, DbGet().Select(&entities, query)
 }
 
-func MakeProjectsFetchOne(fieldName string) func(string) (*Project, error) {
-	return func(field string) (*Project, error) {
-		var e Project
-		var query = `SELECT ` + projectSqlParams + ` FROM projects WHERE ` + fieldName + ` = $1`
-		row := DbQueryRow(query, field)
-		err := row.Scan(&e.Id, &e.Title, &e.Created, &e.Updated)
+func ProjectsFetchOne(id string) (*Project, error) {
+	var entity = Project{}
+	var query = "SELECT " + strings.Join(projectsColumns, ",") + " FROM projects WHERE id=$1"
 
-		switch {
-		case err == sql.ErrNoRows:
-			return ProjectNotFound, nil
-		default:
-			return &e, err
-		}
-	}
+	return &entity, DbGet().Get(&entity, query, id)
 }
 
-var ProjectsFetchOne = MakeProjectsFetchOne("id")
-var ProjectsFetchOneByTitle = MakeProjectsFetchOne("title")
+func ProjectsFetchOneByTitle(title string) (*Project, error) {
+	var entity = Project{}
+	var query = "SELECT " + strings.Join(projectsColumns, ",") + " FROM projects WHERE title=$1"
 
-func ProjectsCreate(e *Project) error {
-	var query = `INSERT INTO projects (` + projectSqlParams + `) VALUES ($1, $2, $3, $4)`
-	_, err := DbExec(query, e.Id, e.Title, e.Created, e.Updated)
+	return &entity, DbGet().Get(&entity, query, title)
+}
+
+func ProjectsCreate(entity *Project) error {
+	var query = "INSERT INTO projects (" + strings.Join(projectsColumns, ",") + ") VALUES (:" + strings.Join(projectsColumns, ",:") + ")"
+	_, err := DbGet().NamedExec(query, entity)
+	return err
+}
+
+func ProjectsUpdate(entity *Project) error {
+	updates := []string{}
+	for _, column := range projectsColumns {
+		if column == "id" {
+			continue
+		}
+		updates = append(updates, column+"=:"+column)
+	}
+	var query = "UPDATE projects SET " + strings.Join(updates, ",") + " WHERE id=:id"
+	_, err := DbGet().NamedExec(query, entity)
+	return err
+}
+
+func ProjectsDestroy(id string) error {
+	var query = "DELETE FROM projects WHERE id=$1 LIMIT 1"
+	_, err := DbGet().Exec(query, id)
 	return err
 }

@@ -62,7 +62,7 @@ var routes = Routes{
 	Route{
 		"V1ProjectsCreate",
 		"POST",
-		"/v1/projects",
+		"/v1/projects/",
 		false,
 		V1ProjectsCreate,
 	},
@@ -76,6 +76,13 @@ var routes = Routes{
 		"/v1/users/",
 		false,
 		V1UsersIndex,
+	},
+	Route{
+		"V1UsersCreate",
+		"POST",
+		"/v1/users/",
+		false,
+		V1UsersCreate,
 	},
 
 	// Builds
