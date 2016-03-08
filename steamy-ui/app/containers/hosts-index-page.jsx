@@ -10,11 +10,7 @@ import SimpleNav from '../components/simple-nav.jsx';
 
 class HostsIndexPage extends Component {
     componentDidMount() {
-        const { dispatch, currentUser } = this.props;
-
-        if (!currentUser) {
-            dispatch(ActionTypes.fetchCurrentUser());
-        }
+        const { dispatch } = this.props;
 
         dispatch(ActionTypes.hostsFetchList());
     }
@@ -75,15 +71,14 @@ class HostsIndexPage extends Component {
 }
 
 const mapStateToProps = state => {
-    const { authToken, entities } = state;
-    const currentUser = entities.users.current;
+    const { entities } = state;
     const hostResponses = map(prop('data'), filter(
         propEq('status', STATUS_SUCCESS),
         values(entities.hosts)
     ));
     const hosts = reverse(sortBy(prop('updated'), hostResponses));
 
-    return {currentUser, hosts};
+    return {hosts};
 };
 
 export default connect(mapStateToProps)(HostsIndexPage);

@@ -78,7 +78,7 @@ export function projectsCreate(title) {
             entityType: 'projects',
             id: 'created',
             method: 'POST',
-            endpoint: '/v1/projects',
+            endpoint: '/v1/projects/',
             body: {title}
         }
     };
@@ -104,6 +104,18 @@ export function usersFetchList(params) {
             method: 'GET',
             endpoint: `/v1/users/`,
             params
+        }
+    };
+}
+
+export function usersCreate(email, password) {
+    return {
+        [CALL_API]: {
+            entityType: 'users',
+            id: 'created',
+            method: 'POST',
+            endpoint: '/v1/users/',
+            body: {email, password}
         }
     };
 }
