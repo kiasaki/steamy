@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import {
-    sortBy, map, filter, reverse, prop, propEq, values, uniqBy
+    sortBy, map, filter, reverse, prop, propEq, values, uniqBy, reject, merge, pipe
 } from 'ramda';
 import { STATUS_SUCCESS } from '../lib/api-middleware';
 
@@ -24,11 +24,18 @@ class UsersIndexPage extends Component {
         };
     }
 
-    createHandleDestroy(id) {
-        const userId = id;
+    createHandleDestroy(originalUser) {
+        const { dispatch } = this.props;
+        const user = originalUser;
+
         return () => {
             if (confirm('Are you sure?')) {
-                this.props.dispatch(push(`/users/${userId}`));
+                dispatch(ActionTypes.usersUpdate(merge(user, {
+                    deleted: true
+                })));
+                setTimeout(() => {
+                    dispatch(ActionTypes.usersFetchList());
+                }, 500);
             }
         };
     }
@@ -45,7 +52,7 @@ class UsersIndexPage extends Component {
                     <Link to={`/users/${u.id}`}>Edit</Link>
                     &nbsp;&nbsp;
                     {users.length > 1 ? (
-                        <a href="#" onClick={this.createHandleDestroy(u.id)} className="color-danger">
+                        <a href="#" onClick={this.createHandleDestroy(u)} className="color-danger">
                             Delete
                         </a>
                     ) : null}
@@ -71,12 +78,17 @@ class UsersIndexPage extends Component {
 
 const mapStateToProps = state => {
     const { entities } = state;
-    const userResponses = uniqBy(prop('id'), map(prop('data'), filter(
-        propEq('status', STATUS_SUCCESS),
-        values(entities.users)
-    )));
-    const users = reverse(sortBy(prop('updated'), userResponses));
 
+    let extractFilterSortEntities = pipe(
+        values,
+        filter(propEq('status', STATUS_SUCCESS)),
+        map(prop('data')),
+        uniqBy(prop('id')),
+        reject(prop('deleted')),
+        sortBy(prop('email'))
+    );
+    const users = extractFilterSortEntities(entities.users);
+    
     return {users};
 };
 

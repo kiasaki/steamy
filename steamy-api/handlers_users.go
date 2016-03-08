@@ -38,6 +38,21 @@ func V1UsersIndex(w http.ResponseWriter, r *http.Request) {
 	SetOKResponse(w, J{"data": users})
 }
 
+func validateUser(w http.ResponseWriter, user *data.User) bool {
+	if len(user.Email) <= 0 {
+		SetBadRequestResponse(w)
+		WriteEntity(w, J{"error": "Email is a required field"})
+		return false
+	}
+	if len(user.Password) < 8 {
+		SetBadRequestResponse(w)
+		WriteEntity(w, J{"error": "A password of minimum 8 characters is required"})
+		return false
+	}
+
+	return true
+}
+
 func V1UsersCreate(w http.ResponseWriter, r *http.Request) {
 	var user = &data.User{}
 	err := Bind(r, user)
@@ -48,14 +63,8 @@ func V1UsersCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if len(user.Email) <= 0 {
-		SetBadRequestResponse(w)
-		WriteEntity(w, J{"error": "Email is a required field"})
-		return
-	}
-	if len(user.Password) < 8 {
-		SetBadRequestResponse(w)
-		WriteEntity(w, J{"error": "A password of minimum 8 characters is required"})
+	valid := validateUser(w, user)
+	if !valid {
 		return
 	}
 
@@ -78,5 +87,45 @@ func V1UsersCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	user.Password = ""
+	SetOKResponse(w, J{"data": user})
+}
+
+func V1UsersUpdate(w http.ResponseWriter, r *http.Request) {
+	var id = PathString(r, "id")
+	var user = &data.User{}
+	err := Bind(r, user)
+	if err != nil {
+		fmt.Println(err)
+		SetBadRequestResponse(w)
+		WriteEntity(w, J{"error": "Error reading request entity"})
+		return
+	}
+	user.Id = id
+
+	valid := validateUser(w, user)
+	if !valid {
+		return
+	}
+
+	// Update password if non-empty
+	if user.Password != "" {
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), BCRYPT_COST)
+		if err != nil {
+			SetInternalServerErrorResponse(w, err)
+			WriteEntity(w, J{"error": "Error saving user"})
+			return
+		}
+		user.Password = string(hashedPassword)
+	}
+
+	err = data.UsersUpdate(user)
+	if err != nil {
+		SetInternalServerErrorResponse(w, err)
+		WriteEntity(w, J{"error": "Error saving user to database"})
+		return
+	}
+
+	user.Password = ""
 	SetOKResponse(w, J{"data": user})
 }

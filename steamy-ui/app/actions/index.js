@@ -119,3 +119,15 @@ export function usersCreate(email, password) {
         }
     };
 }
+
+export function usersUpdate(user) {
+    return {
+        [CALL_API]: {
+            entityType: 'users',
+            id: 'updated',
+            method: 'PATCH',
+            endpoint: `/v1/users/${user.id}/`,
+            body: user
+        }
+    };
+}

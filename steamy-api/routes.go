@@ -84,6 +84,13 @@ var routes = Routes{
 		false,
 		V1UsersCreate,
 	},
+	Route{
+		"V1UsersUpdate",
+		"PATCH",
+		"/v1/users/{id}/",
+		false,
+		V1UsersUpdate,
+	},
 
 	// Builds
 	Route{
