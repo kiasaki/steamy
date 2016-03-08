@@ -12,11 +12,19 @@ body, html {
     box-sizing: border-box;
 }
 
+a {
+    color: #3AB34F;
+}
+
 .text-right {
     text-align: right;
 }
 .text-center {
     text-align: center;
+}
+
+.color-danger {
+    color: #D9534F;
 }
 
 .alert {
@@ -42,6 +50,29 @@ body, html {
 }
 .empty-state span {
     font-size: 2.0rem;
+}
+
+.box {
+    background: #fff;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.25);
+    margin: 2.5rem 0;
+    padding: 1.5em;
+}
+.box form:last-child {
+    margin-bottom: 0;
+}
+.box.box--table {
+    width: 100%;
+}
+.box.box--table td,
+.box.box--table th {
+    padding: 0.8rem 1.2rem;
+    font-size: 1.1em;
+    border-bottom: 1px solid #ccc;
+}
+
+form button {
+    display: block;
 }
 
 /* Header */
@@ -93,21 +124,6 @@ body, html {
 .page-navigation a:hover {
     background: rgba(0,0,0,0.15);
 }
-
-.box {
-    background: #fff;
-    box-shadow: 0 2px 3px rgba(0,0,0,0.25);
-    margin: 2.5rem 0;
-    padding: 1.5em;
-}
-.box form:last-child {
-    margin-bottom: 0;
-}
-
-form button {
-    display: block;
-}
-
 
 /* Signin */
 .signin {

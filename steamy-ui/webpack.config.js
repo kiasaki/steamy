@@ -4,6 +4,22 @@ const webpack = require('webpack');
 
 const path = require('path');
 
+let plugins = [];
+if (process.env.NODE_ENV === 'production') {
+  plugins = [
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
+        })
+  ];
+}
+
 const common = {
     context: __dirname + '/app',
     entry: './index',
@@ -25,18 +41,7 @@ const common = {
         }]
     },
 
-    plugins: [
-        new webpack.DefinePlugin({
-            'process.env': {
-                'NODE_ENV': JSON.stringify('production')
-            }
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
-        })
-    ],
+    plugins: plugins,
 };
 
 module.exports = common;
