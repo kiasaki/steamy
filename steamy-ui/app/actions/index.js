@@ -83,3 +83,27 @@ export function projectsCreate(title) {
         }
     };
 }
+
+export function hostsFetchList(params) {
+    return {
+        [CALL_API]: {
+            id: 'list',
+            entityType: 'hosts',
+            method: 'GET',
+            endpoint: `/v1/hosts/`,
+            params
+        }
+    };
+}
+
+export function usersFetchList(params) {
+    return {
+        [CALL_API]: {
+            id: 'list',
+            entityType: 'users',
+            method: 'GET',
+            endpoint: `/v1/users/`,
+            params
+        }
+    };
+}

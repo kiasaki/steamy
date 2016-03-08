@@ -1,5 +1,6 @@
 steamy-cli/steamy
 steamy-api/steamy-api
 steamy-ui/app-bundle.js
+steamy-ui/app-bundle.js.map
 steamy-ui/node_modules
 example-project/node_modules
