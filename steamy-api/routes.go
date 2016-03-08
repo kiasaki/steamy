@@ -44,6 +44,7 @@ var routes = Routes{
 		V1CurrentUser,
 	},
 
+	// Projects
 	Route{
 		"V1ProjectsShow",
 		"GET",
@@ -66,6 +67,18 @@ var routes = Routes{
 		V1ProjectsCreate,
 	},
 
+	// Hosts
+
+	// Users
+	Route{
+		"V1UsersIndex",
+		"GET",
+		"/v1/users/",
+		false,
+		V1UsersIndex,
+	},
+
+	// Builds
 	Route{
 		"V1BuildsIndex",
 		"GET",

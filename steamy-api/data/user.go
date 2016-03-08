@@ -19,7 +19,7 @@ var UserNotFound = &User{}
 
 func UsersFetchList() (*Users, error) {
 	var users Users
-	var query = `SELECT id, email, password, created FROM users`
+	var query = `SELECT id, email, password, deleted, created FROM users`
 	rows, err := DbQuery(query)
 	if err != nil {
 		return &users, err
@@ -29,7 +29,7 @@ func UsersFetchList() (*Users, error) {
 
 	for rows.Next() {
 		var user User
-		err := rows.Scan(&user.Id, &user.Email, &user.Password, &user.Created)
+		err := rows.Scan(&user.Id, &user.Email, &user.Password, &user.Deleted, &user.Created)
 		if err != nil {
 			return &users, err
 		}
@@ -43,9 +43,9 @@ func UsersFetchList() (*Users, error) {
 func MakeUsersFetchOne(fieldName string) func(string) (*User, error) {
 	return func(value string) (*User, error) {
 		var e User
-		var query = `SELECT id, email, password, created FROM users WHERE ` + fieldName + ` = $1`
+		var query = `SELECT id, email, password, deleted, created FROM users WHERE ` + fieldName + ` = $1`
 		row := DbQueryRow(query, value)
-		err := row.Scan(&e.Id, &e.Email, &e.Password, &e.Created)
+		err := row.Scan(&e.Id, &e.Email, &e.Password, &e.Deleted, &e.Created)
 
 		switch {
 		case err == sql.ErrNoRows:
@@ -59,17 +59,17 @@ func MakeUsersFetchOne(fieldName string) func(string) (*User, error) {
 var UsersFetchOne = MakeUsersFetchOne("id")
 var UsersFetchOneByEmail = MakeUsersFetchOne("email")
 
-// Use GenerateFromPassword for new password
+// Use bcrypt.GenerateFromPassword for new password
 
 func UsersCreate(user *User) error {
-	var query = `INSERT INTO users (id, email, password, created) VALUES ($1, $2, $3, $4)`
-	_, err := DbExec(query, user.Id, user.Email, user.Password, user.Created)
+	var query = `INSERT INTO users (id, email, password, deleted, created) VALUES ($1, $2, $3, $4)`
+	_, err := DbExec(query, user.Id, user.Email, user.Password, user.Deleted, user.Created)
 	return err
 }
 
 func UsersUpdate(user *User) error {
-	var query = `UPDATE users SET email=$2, password=$3, created=$4 WHERE id=$1`
-	_, err := DbExec(query, user.Id, user.Email, user.Password, user.Created)
+	var query = `UPDATE users SET email=$2, password=$3, deleted=$4, created=$5 WHERE id=$1`
+	_, err := DbExec(query, user.Id, user.Email, user.Password, user.Deleted, user.Created)
 	return err
 }
 
