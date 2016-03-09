@@ -32,7 +32,7 @@ const mapStateToProps = (state, ownProps) => {
     const id = ownProps.params.id;
     const project = state.entities.projects[id] || {};
 
-    return { id, project };
+    return {id, project};
 };
 
 export default connect(mapStateToProps)(ProjectsShowPage);

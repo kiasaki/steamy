@@ -96,6 +96,17 @@ export function hostsFetchList(params) {
     };
 }
 
+export function usersFetchOne(id) {
+    return {
+        [CALL_API]: {
+            id,
+            entityType: 'users',
+            method: 'GET',
+            endpoint: `/v1/users/${id}`
+        }
+    };
+}
+
 export function usersFetchList(params) {
     return {
         [CALL_API]: {

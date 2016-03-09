@@ -25,8 +25,7 @@ class UsersCreatePage extends Component {
         const user = nextProps.user;
 
         if (user.status === STATUS_SUCCESS) {
-            const id = user.data.id;
-            this.props.dispatch(push(`/users/${id}`));
+            this.props.dispatch(push('/users'));
         }
     }
 
