@@ -97,4 +97,4 @@ const mapStateToProps = (state, ownProps) => {
     return {id, user, updatedUser};
 };
 
-export default connect(mapStateToProps)(ProjectsShowPage);
+export default connect(mapStateToProps)(UsersShowPage);
