@@ -8,9 +8,25 @@ import { push } from 'react-router-redux';
 import { pipe, values, map, filter, prop, propEq, uniqBy } from 'ramda';
 
 class ProjectsShowPage extends Component {
+    constructor(params) {
+        super(params);
+
+        this.handleNewProjectSelected = this.handleNewProjectSelected.bind(this);
+    }
+
     componentDidMount() {
         const id = this.props.id;
         this.props.dispatch(ActionTypes.projectsFetchList());
+        document.body.className = "is-full-width";
+    }
+
+    componentWillUnmount() {
+        document.body.className = "";
+    }
+
+    handleNewProjectSelected(newProjectId) {
+        console.log(newProjectId);
+        this.props.dispatch(push(`/projects/${newProjectId}`));
     }
 
     render() {
@@ -21,7 +37,11 @@ class ProjectsShowPage extends Component {
 
         return (
             <div>
-                <ProjectNav projects={projects} project={project} />
+                <ProjectNav
+                    projects={projects}
+                    project={project}
+                    handleNewProjectSelected={this.handleNewProjectSelected}
+                />
 
                 <div className="project cf">
                     <div className="project__col">

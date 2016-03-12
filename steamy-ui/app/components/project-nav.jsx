@@ -10,6 +10,7 @@ class ProjectNav extends Component {
     }
 
     handleChange(event) {
+        this.props.handleNewProjectSelected(event.target.value);
     }
 
     render() {
@@ -60,7 +61,8 @@ class ProjectNav extends Component {
 
 ProjectNav.propTypes = {
     project: PropTypes.object,
-    projects: PropTypes.array.isRequired
+    projects: PropTypes.array.isRequired,
+    handleNewProjectSelected: PropTypes.func.isRequired
 };
 
 export default ProjectNav;
