@@ -1,7 +1,8 @@
 import * as ActionTypes from '../actions';
 import React, { Component } from 'react';
 import SimpleNav from '../components/simple-nav.jsx';
-import { STATUS_REQUEST, STATUS_SUCCESS, STATUS_FAILURE } from '../lib/api-middleware';
+import { Link } from 'react-router';
+import { STATUS_REQUEST, STATUS_SUCCESS, STATUS_FAILURE, API_UPDATE } from '../lib/api-middleware';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
@@ -17,6 +18,16 @@ class UsersShowPage extends Component {
         this.props.dispatch(ActionTypes.usersFetchOne(id));
     }
 
+    componentWillUnmount() {
+        // Reset updated user for clean state on next user edit
+        this.props.dispatch({
+            type: API_UPDATE,
+            entityType: 'users',
+            id: 'updated',
+            response: null
+        });
+    }
+
     componentWillReceiveProps(nextProps) {
         const user = nextProps.updatedUser;
 
@@ -27,7 +38,7 @@ class UsersShowPage extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        const user = this.props.user;
+        const user = this.props.user.data;
 
         user.email = this.refs.email.value;
         user.password = this.refs.password.value;
@@ -36,7 +47,7 @@ class UsersShowPage extends Component {
     }
 
     render() {
-        const { user, userUpdate } = this.props;
+        const { user, updatedUser } = this.props;
         let content;
 
         if (!user || user.status === STATUS_REQUEST) {
@@ -50,10 +61,10 @@ class UsersShowPage extends Component {
         } else {
             let error = null;
 
-            if (userUpdate.status === STATUS_FAILURE) {
+            if (updatedUser && updatedUser.status === STATUS_FAILURE) {
                 error = (
                     <div className="alert alert--error">
-                        {user.error}
+                        {updatedUser.error}
                     </div>
                 );
             }
@@ -63,14 +74,15 @@ class UsersShowPage extends Component {
                     {error}
 
                     <label>Email</label>
-                    <input type="text" ref="email" defaultValue={user.email} autoFocus />
+                    <input type="text" ref="email" defaultValue={user.data.email} autoFocus />
 
                     <label>Password (optionnal, password won't change if left empty)</label>
                     <input type="password" ref="password" />
 
                     <button type="submit">
-                        Create
+                        Save
                     </button>
+                    <Link to="/users">&larr; or go back</Link>
                 </form>
             );
         }

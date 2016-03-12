@@ -25,26 +25,34 @@ func V1UsersShow(w http.ResponseWriter, r *http.Request) {
 		WriteEntity(w, J{"error": "Can't find user"})
 	}
 
+	user.Password = ""
 	SetOKResponse(w, J{"data": user})
 }
 
 func V1UsersIndex(w http.ResponseWriter, r *http.Request) {
-	users, err := data.UsersFetchList()
+	fetchedUsers, err := data.UsersFetchList()
 	if err != nil {
 		SetInternalServerErrorResponse(w, err)
 		return
 	}
+	users := *fetchedUsers
 
+	for i := range users {
+		users[i].Password = ""
+	}
 	SetOKResponse(w, J{"data": users})
 }
 
-func validateUser(w http.ResponseWriter, user *data.User) bool {
+func validateUser(w http.ResponseWriter, user *data.User, isUpdate bool) bool {
 	if len(user.Email) <= 0 {
 		SetBadRequestResponse(w)
 		WriteEntity(w, J{"error": "Email is a required field"})
 		return false
 	}
 	if len(user.Password) < 8 {
+		if isUpdate && len(user.Password) == 0 {
+			return true
+		}
 		SetBadRequestResponse(w)
 		WriteEntity(w, J{"error": "A password of minimum 8 characters is required"})
 		return false
@@ -63,7 +71,7 @@ func V1UsersCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	valid := validateUser(w, user)
+	valid := validateUser(w, user, false)
 	if !valid {
 		return
 	}
@@ -103,7 +111,7 @@ func V1UsersUpdate(w http.ResponseWriter, r *http.Request) {
 	}
 	user.Id = id
 
-	valid := validateUser(w, user)
+	valid := validateUser(w, user, true)
 	if !valid {
 		return
 	}

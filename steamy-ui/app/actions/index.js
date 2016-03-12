@@ -49,6 +49,7 @@ export function tokensCreate(email, password) {
     };
 }
 
+// Projects
 export function projectsFetchOne(id) {
     return {
         [CALL_API]: {
@@ -59,7 +60,6 @@ export function projectsFetchOne(id) {
         }
     };
 }
-
 export function projectsFetchList(params) {
     return {
         [CALL_API]: {
@@ -71,7 +71,6 @@ export function projectsFetchList(params) {
         }
     };
 }
-
 export function projectsCreate(title) {
     return {
         [CALL_API]: {
@@ -84,6 +83,7 @@ export function projectsCreate(title) {
     };
 }
 
+// Hosts
 export function hostsFetchList(params) {
     return {
         [CALL_API]: {
@@ -96,17 +96,17 @@ export function hostsFetchList(params) {
     };
 }
 
+// Users
 export function usersFetchOne(id) {
     return {
         [CALL_API]: {
             id,
             entityType: 'users',
             method: 'GET',
-            endpoint: `/v1/users/${id}`
+            endpoint: `/v1/users/${id}/`
         }
     };
 }
-
 export function usersFetchList(params) {
     return {
         [CALL_API]: {
@@ -118,7 +118,6 @@ export function usersFetchList(params) {
         }
     };
 }
-
 export function usersCreate(email, password) {
     return {
         [CALL_API]: {
@@ -130,7 +129,6 @@ export function usersCreate(email, password) {
         }
     };
 }
-
 export function usersUpdate(user) {
     return {
         [CALL_API]: {

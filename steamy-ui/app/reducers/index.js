@@ -34,6 +34,12 @@ const entities = (state = entitiesReducerDefaultState, action) => {
     if (action.type === API_UPDATE) {
         const { entityType, id, response } = action;
 
+        if (!response) {
+            const newEntities = clone(state[entityType]);
+            delete newEntities[id];
+            return merge(state, {[entityType]: newEntities});
+        }
+
         if ('data' in response && Array.isArray(response.data)) {
             const entities = fromPairs(map(entity => {
                 const entityResponse = clone(response);

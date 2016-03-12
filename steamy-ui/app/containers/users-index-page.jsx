@@ -49,10 +49,10 @@ class UsersIndexPage extends Component {
                     {u.email}
                 </td>
                 <td className="text-right">
-                    <Link to={`/users/${u.id}`}>Edit</Link>
+                    <a onClick={this.createHandleShow(u.id)}>Edit</a>
                     &nbsp;&nbsp;
                     {users.length > 1 ? (
-                        <a href="#" onClick={this.createHandleDestroy(u)} className="color-danger">
+                        <a onClick={this.createHandleDestroy(u)} className="color-danger">
                             Delete
                         </a>
                     ) : null}

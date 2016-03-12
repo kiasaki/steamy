@@ -71,6 +71,13 @@ var routes = Routes{
 
 	// Users
 	Route{
+		"V1UsersShow",
+		"GET",
+		"/v1/users/{id}/",
+		false,
+		V1UsersShow,
+	},
+	Route{
 		"V1UsersIndex",
 		"GET",
 		"/v1/users/",
