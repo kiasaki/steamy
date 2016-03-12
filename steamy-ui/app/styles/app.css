@@ -24,6 +24,9 @@ a {
 .text-center {
     text-align: center;
 }
+.text-muted {
+    color: #999;
+}
 
 .color-danger {
     color: #D9534F;
@@ -126,6 +129,15 @@ form button {
 .page-navigation a:hover {
     background: rgba(0,0,0,0.15);
 }
+.page-navigation--project select {
+    margin-bottom: 0;
+    margin-right: 1em;
+    height: 30px;
+    font-size: 1.1em;
+    border: none;
+    background: #7F2BFF;
+    color: #fff;
+}
 
 /* Signin */
 .signin {
@@ -220,5 +232,27 @@ form button {
     background: #efefef;
     color: #777;
 }
-    
+
+/* Project */
+.project {
+    margin: 1.5em 2em;
+}
+.project__col {
+    width: 300px;
+    margin-right: 1.5em;
+    float: left;
+}
+.project__col:last-child {
+    margin-right: 0;
+}
+.project__header {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+.project .empty-state {
+    margin-top: 0.5em;
+}
+.project .empty-state span {
+    font-size: 1.8rem;
+}
 
