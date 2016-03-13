@@ -85,6 +85,29 @@ var routes = Routes{
 		V1ProjectsUpdate,
 	},
 
+	// Environments
+	Route{
+		"V1EnvironmentsIndex",
+		"GET",
+		"/v1/projects/{projectId}/environments/",
+		false,
+		V1EnvironmentsIndex,
+	},
+	Route{
+		"V1EnvironmentsCreate",
+		"POST",
+		"/v1/projects/{projectId}/environments/",
+		false,
+		V1EnvironmentsCreate,
+	},
+	Route{
+		"V1EnvironmentsUpdate",
+		"PATCH",
+		"/v1/projects/{projectId}/environments/{id}/",
+		false,
+		V1EnvironmentsUpdate,
+	},
+
 	// Hosts
 
 	// Users

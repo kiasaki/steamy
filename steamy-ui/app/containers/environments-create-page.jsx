@@ -68,7 +68,7 @@ const mapStateToProps = (state, ownProps) => {
     const currentUser = entities.users.current;
     const environment = entities.environments.created || {};
 
-    return {currentUser, environment};
+    return {projectId, currentUser, environment};
 };
 
 export default connect(mapStateToProps)(ProjectsCreatePage);
