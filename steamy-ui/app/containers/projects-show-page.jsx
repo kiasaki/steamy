@@ -5,7 +5,7 @@ import { STATUS_SUCCESS, STATUS_FAILURE } from '../lib/api-middleware';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { pipe, values, map, filter, prop, propEq, uniqBy } from 'ramda';
+import { pipe, values, map, filter, prop, propEq, uniqBy, sortBy, take } from 'ramda';
 
 class ProjectsShowPage extends Component {
     constructor(params) {
@@ -15,12 +15,22 @@ class ProjectsShowPage extends Component {
     }
 
     componentDidMount() {
+        const { id } = this.props;
+
         this.props.dispatch(ActionTypes.projectsFetchList());
-        document.body.className = "is-full-width";
+        this.props.dispatch(ActionTypes.buildsFetchList({
+            limit: 20,
+            order: '-created',
+            filter: JSON.stringify({
+                project_id: id
+            })
+        }));
+
+        document.body.className = 'is-full-width';
     }
 
     componentWillUnmount() {
-        document.body.className = "";
+        document.body.className = '';
     }
 
     handleNewProjectSelected(newProjectId) {
@@ -28,10 +38,12 @@ class ProjectsShowPage extends Component {
     }
 
     render() {
-        const { project, projects } = this.props;
+        const { project, projects, builds } = this.props;
 
         const settingsUrl = `/projects/${project.id}/settings`;
         const newEnvironmentUrl = `/projects/${project.id}/environments/create`;
+
+        console.log(builds);
 
         return (
             <div>
@@ -109,9 +121,16 @@ const mapStateToProps = (state, ownProps) => {
         map(prop('data')),
         uniqBy(prop('id'))
     );
-    const projects = extractFilterSortEntities(state.entities.projects);
 
-    return {id, project, projects};
+    const projects = extractFilterSortEntities(state.entities.projects);
+    const builds = pipe(
+        extractFilterSortEntities,
+        filter(propEq('projectId', id)),
+        sortBy(prop('created')),
+        take(20)
+    )(state.entities.builds);
+
+    return {id, project, projects, builds};
 };
 
 export default connect(mapStateToProps)(ProjectsShowPage);

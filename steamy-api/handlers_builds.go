@@ -35,5 +35,11 @@ func V1BuildsIndex(w http.ResponseWriter, r *http.Request) {
 	}
 
 	builds, err := data.BuildsFetchList(order, limit, wheres)
+	if err != nil {
+		SetInternalServerErrorResponse(w, err)
+		WriteEntity(w, J{"error": "Error fetching builds"})
+		return
+	}
+
 	SetOKResponse(w, J{"data": builds})
 }

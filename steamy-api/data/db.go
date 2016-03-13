@@ -35,13 +35,7 @@ func sqlForFetchList(tableName string, columns []string, order string, limit int
 	// Order: Validity check
 	var orderBySql = ""
 	if order != "" {
-		var validOrderColumn = false
-		for _, column := range buildsColumns {
-			if column == order {
-				validOrderColumn = true
-			}
-		}
-		if !validOrderColumn {
+		if !containsString(columns, order) {
 			return "", []interface{}{}, errors.New("Invalid sort order column")
 		}
 		orderBySql = "ORDER BY " + order + " " + sortDirection
@@ -52,11 +46,18 @@ func sqlForFetchList(tableName string, columns []string, order string, limit int
 	var whereColumns = []string{}
 	var whereValues = []interface{}{}
 	for column, value := range wheres {
+		if !containsString(columns, column) {
+			return "", []interface{}{}, errors.New("Invalid filter column")
+		}
 		whereColumns = append(whereColumns, column)
 		whereValues = append(whereValues, value)
 	}
 	if len(whereColumns) > 0 {
-		whereSql = "WHERE " + strings.Join(whereColumns, ",")
+		var whereSqlColumns = []string{}
+		for i, column := range whereColumns {
+			whereSqlColumns = append(whereSqlColumns, column+" = $"+strconv.Itoa(i+1))
+		}
+		whereSql = "WHERE " + strings.Join(whereSqlColumns, ", ")
 	}
 
 	// Limit
@@ -71,4 +72,13 @@ func sqlForFetchList(tableName string, columns []string, order string, limit int
 	}, " ")
 
 	return query, whereValues, nil
+}
+
+func containsString(list []string, item string) bool {
+	for _, i := range list {
+		if i == item {
+			return true
+		}
+	}
+	return false
 }

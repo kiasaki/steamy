@@ -12,7 +12,7 @@ func (s BuildStatus) Value() (driver.Value, error) {
 	return []byte(s), nil
 }
 func (s *BuildStatus) Scan(value interface{}) error {
-	*s = BuildStatus(value.(string))
+	*s = BuildStatus(string(value.([]byte)))
 	return nil
 }
 
@@ -49,9 +49,9 @@ func BuildsCreate(entity *Build) error {
 	return err
 }
 
-func BuildsFetchList(order string, limit int, wheres map[string]interface{}) (*Projects, error) {
-	var entities = Projects{}
-	query, whereValues, err := sqlForFetchList("projects", projectsColumns, order, limit, wheres)
+func BuildsFetchList(order string, limit int, wheres map[string]interface{}) (*Builds, error) {
+	var entities = Builds{}
+	query, whereValues, err := sqlForFetchList("builds", buildsColumns, order, limit, wheres)
 	if err != nil {
 		return &entities, err
 	}

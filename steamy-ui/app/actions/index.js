@@ -152,3 +152,16 @@ export function usersUpdate(user) {
         }
     };
 }
+
+// Builds
+export function buildsFetchList(params) {
+    return {
+        [CALL_API]: {
+            id: 'list',
+            entityType: 'builds',
+            method: 'GET',
+            endpoint: `/v1/builds/`,
+            params
+        }
+    };
+}
