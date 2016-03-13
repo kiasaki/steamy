@@ -40,6 +40,12 @@ func UsersFetchOneByEmail(email string) (*User, error) {
 
 	return &entity, DbGet().Get(&entity, query, email)
 }
+func UsersFetchOneByApiToken(apiToken string) (*User, error) {
+	var entity = User{}
+	var query = "SELECT " + strings.Join(usersColumns, ",") + " FROM users WHERE api_token=$1"
+
+	return &entity, DbGet().Get(&entity, query, apiToken)
+}
 
 func UsersCreate(entity *User) error {
 	var query = "INSERT INTO users (" + strings.Join(usersColumns, ",") + ") VALUES (:" + strings.Join(usersColumns, ",:") + ")"

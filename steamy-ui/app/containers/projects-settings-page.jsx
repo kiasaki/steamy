@@ -50,7 +50,7 @@ class ProjectsShowPage extends Component {
             currentUserApiToken = currentUser.data.apiToken;
         }
 
-        const webhookUrl = `${window.env.root_url}/hooks/commit?project_id=${this.props.id}&api_token=${currentUserApiToken}`;
+        const webhookUrl = `${window.env.root_url}/v1/hooks/commit/?project_id=${this.props.id}&api_token=${currentUserApiToken}`;
 
         let error = null;
         if (updatedProject.status === STATUS_FAILURE) {

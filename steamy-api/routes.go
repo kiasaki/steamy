@@ -29,6 +29,8 @@ var routes = Routes{
 		true,
 		V1ApiIndex,
 	},
+
+	// Auth
 	Route{
 		"V1TokensCreate",
 		"POST",
@@ -42,6 +44,15 @@ var routes = Routes{
 		"/v1/current-user",
 		false,
 		V1CurrentUser,
+	},
+
+	// Hooks
+	Route{
+		"V1HooksCommit",
+		"POST",
+		"/v1/hooks/commit/",
+		false,
+		V1HooksCommit,
 	},
 
 	// Projects

@@ -19,10 +19,25 @@ func RequireAuthentication(inner http.Handler) http.Handler {
 		var prefixLength = len("Bearer ")
 		var apiAuthorization = r.Header.Get("Authorization")
 		var apiToken = r.Header.Get("X-Api-Token")
+		if apiToken == "" {
+			apiToken = r.URL.Query()["api_token"]
+		}
 
 		// Try token auth
 		if apiToken == configToken {
 			// Skip ahead as one valid auth type is enough
+			goto success
+		}
+
+		// Try user api token
+		user, err = data.UsersFetchOneByApiToken(apiToken)
+		if err != nil {
+			SetInternalServerErrorResponse(w, err)
+			WriteEntity(w, J{"error": "Failed to fetch user for api authorization"})
+		} else if user != data.UserNotFound {
+			// We got a user that matches the api token provided
+			context.Set(r, "currentUser", user)
+			context.Set(r, "currentUserId", user.Id)
 			goto success
 		}
 
