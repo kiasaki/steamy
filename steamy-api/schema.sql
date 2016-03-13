@@ -1,3 +1,10 @@
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS projects CASCADE;
+DROP TABLE IF EXISTS environments CASCADE;
+DROP TABLE IF EXISTS builds CASCADE;
+DROP TABLE IF EXISTS hosts CASCADE;
+DROP TABLE IF EXISTS deployments CASCADE;
+
 CREATE TABLE users (
     id uuid NOT NULL,
     email text NOT NULL,
@@ -13,6 +20,9 @@ CREATE TABLE users (
 CREATE TABLE projects (
     id uuid NOT NULL,
     title text NOT NULL,
+    script_env text NOT NULL,
+    script_build text NOT NULL,
+    script_deploy text NOT NULL,
     created timestamp NOT NULL,
     updated timestamp NOT NULL,
     PRIMARY KEY (id),
@@ -22,6 +32,8 @@ CREATE TABLE projects (
 CREATE TABLE environments (
     id uuid NOT NULL,
     title text NOT NULL,
+    script_env text NOT NULL,
+    script_deploy text NOT NULL,
     hosts text[] NOT NULL,
     groups text[] NOT NULL,
     project_id uuid NOT NULL REFERENCES projects (id),
@@ -69,4 +81,15 @@ CREATE TABLE deployments (
     CHECK (status IN ('running', 'failing', 'failed', 'succeeded')),
     PRIMARY KEY (id),
     CONSTRAINT deployments_id UNIQUE (id)
+);
+
+INSERT INTO users (
+    id, email, password, api_token, deleted, created
+) VALUES (
+    'f8afe41c-03af-4441-b89b-bf6544d4aebb',
+    'admin@localhost',
+    '$2a$12$folUR3dCx0w3wsQFb83LUOTMtY7zJgYq9w3QIKGgJP1MOYkqC1drS', -- deployinate
+    '1c24720446c14ee4a143ce7818edbc35',
+    false,
+    '2016-01-01 00:00:00'
 );

@@ -6,17 +6,23 @@ import (
 )
 
 type Project struct {
-	Id      string    `json:"id" db:"id"`
-	Title   string    `json:"title" db:"title"`
-	Created time.Time `json:"created" db:"created"`
-	Updated time.Time `json:"updated" db:"updated"`
+	Id           string    `json:"id" db:"id"`
+	Title        string    `json:"title" db:"title"`
+	ScriptEnv    string    `json:"script_env" db:"script_env"`
+	ScriptBuild  string    `json:"script_build" db:"script_build"`
+	ScriptDeploy string    `json:"script_deploy" db:"script_deploy"`
+	Created      time.Time `json:"created" db:"created"`
+	Updated      time.Time `json:"updated" db:"updated"`
 }
 
 type Projects []Project
 
 var ProjectNotFound = &Project{}
 
-var projectsColumns = []string{"id", "title", "created", "updated"}
+var projectsColumns = []string{
+	"id", "title", "script_env", "script_build", "script_deploy", "created",
+	"updated",
+}
 
 func ProjectsFetchList() (*Projects, error) {
 	var entities = Projects{}
