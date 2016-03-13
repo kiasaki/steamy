@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 
@@ -20,7 +21,7 @@ func RequireAuthentication(inner http.Handler) http.Handler {
 		var apiAuthorization = r.Header.Get("Authorization")
 		var apiToken = r.Header.Get("X-Api-Token")
 		if apiToken == "" {
-			apiToken = r.URL.Query()["api_token"]
+			apiToken = r.URL.Query().Get("api_token")
 		}
 
 		// Try token auth
@@ -31,10 +32,11 @@ func RequireAuthentication(inner http.Handler) http.Handler {
 
 		// Try user api token
 		user, err = data.UsersFetchOneByApiToken(apiToken)
-		if err != nil {
+		if err != nil && err != sql.ErrNoRows {
 			SetInternalServerErrorResponse(w, err)
 			WriteEntity(w, J{"error": "Failed to fetch user for api authorization"})
-		} else if user != data.UserNotFound {
+			return
+		} else if err != sql.ErrNoRows {
 			// We got a user that matches the api token provided
 			context.Set(r, "currentUser", user)
 			context.Set(r, "currentUserId", user.Id)

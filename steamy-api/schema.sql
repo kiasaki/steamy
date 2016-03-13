@@ -45,6 +45,7 @@ CREATE TABLE builds (
     id uuid NOT NULL,
     version text NOT NULL,
     project_id uuid NOT NULL REFERENCES projects (id),
+    status text NOT NULL,
     repo_url text,
     repo_name text,
     repo_branch text,
@@ -52,7 +53,8 @@ CREATE TABLE builds (
     publisher text,
     created timestamp NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT builds_id UNIQUE (id)
+    CONSTRAINT builds_id UNIQUE (id),
+    CHECK (status IN ('waiting', 'running', 'failed', 'succeeded'))
 );
 
 CREATE TABLE hosts (

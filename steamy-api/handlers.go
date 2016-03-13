@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"io"
 	"net/http"
 	"os"
@@ -82,10 +83,6 @@ func V1CurrentUser(w http.ResponseWriter, r *http.Request) {
 	SetOKResponse(w, J{"data": user})
 }
 
-func BuildsIndex(w http.ResponseWriter, r *http.Request) {
-	SetOKResponse(w, J{})
-}
-
 func BuildsShowArtifact(w http.ResponseWriter, r *http.Request) {
 	var buildId = PathString(r, "buildId")
 	var buildArtifactPath = buildArtifactPath(buildId)
@@ -107,11 +104,11 @@ func BuildsCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	project, err := data.ProjectsFetchOneByTitle(r.PostFormValue("project"))
-	if err != nil {
-		SetInternalServerErrorResponse(w, err)
-	} else if project == data.ProjectNotFound {
+	if err == sql.ErrNoRows {
 		SetNotFoundResponse(w)
 		WriteEntity(w, J{"error": "Project not found"})
+	} else if err != nil {
+		SetInternalServerErrorResponse(w, err)
 	}
 
 	// Get file from request

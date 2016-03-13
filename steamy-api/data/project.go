@@ -17,8 +17,6 @@ type Project struct {
 
 type Projects []Project
 
-var ProjectNotFound = &Project{}
-
 var projectsColumns = []string{
 	"id", "title", "script_env", "script_build", "script_deploy", "created",
 	"updated",

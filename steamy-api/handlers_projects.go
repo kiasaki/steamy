@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 	"time"
@@ -13,13 +14,12 @@ func V1ProjectsShow(w http.ResponseWriter, r *http.Request) {
 	var id = PathString(r, "id")
 
 	project, err := data.ProjectsFetchOne(id)
-	if err != nil {
-		SetInternalServerErrorResponse(w, err)
-		return
-	}
-	if project == data.ProjectNotFound {
+	if err == sql.ErrNoRows {
 		SetNotFoundResponse(w)
 		WriteEntity(w, J{"error": "Can't find project"})
+	} else if err != nil {
+		SetInternalServerErrorResponse(w, err)
+		return
 	}
 
 	SetOKResponse(w, J{"data": project})

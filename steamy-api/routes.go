@@ -121,9 +121,9 @@ var routes = Routes{
 	Route{
 		"V1BuildsIndex",
 		"GET",
-		"/v1/builds",
+		"/v1/builds/",
 		false,
-		BuildsIndex,
+		V1BuildsIndex,
 	},
 	Route{
 		"V1BuildsCreate",
