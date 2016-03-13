@@ -6,7 +6,7 @@ import { STATUS_SUCCESS } from '../lib/api-middleware';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
-class ProjectsCreatePage extends Component {
+class EnvironmentsCreatePage extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,17 +22,25 @@ class ProjectsCreatePage extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { environment } = nextProps;
+        const { projectId, environment } = nextProps;
 
         if (environment.status === STATUS_SUCCESS) {
-            const id = project.data.id;
-            this.props.dispatch(push(`/projects/${id}`));
+            this.props.dispatch(push(`/projects/${projectId}`));
         }
     }
 
-    handleSubmit() {
-        const { dispatch } = this.props;
-        dispatch(ActionTypes.environmentsCreate(environment));
+    handleSubmit(environment) {
+        const { dispatch, projectId } = this.props;
+
+        // Convert comma separated lists to actual arrays
+        if (!Array.isArray(environment.groups)) {
+            environment.groups = environment.groups.split(',').map(s => s.trim());
+        }
+        if (!Array.isArray(environment.hosts)) {
+            environment.hosts = environment.hosts.split(',').map(s => s.trim());
+        }
+
+        dispatch(ActionTypes.environmentsCreate(projectId, environment));
     }
 
     render() {
@@ -71,4 +79,4 @@ const mapStateToProps = (state, ownProps) => {
     return {projectId, currentUser, environment};
 };
 
-export default connect(mapStateToProps)(ProjectsCreatePage);
+export default connect(mapStateToProps)(EnvironmentsCreatePage);

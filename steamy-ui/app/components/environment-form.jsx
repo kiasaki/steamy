@@ -16,6 +16,12 @@ class EnvironmentForm extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
+    componentDidMount() {
+        // Fire off an initial change event so even if no field change
+        // but submit is clicked, we have default values in state
+        this.handleChange();
+    }
+
     handleSubmit(event) {
         event.preventDefault();
         this.props.onSubmit(this.state.environment);
@@ -26,7 +32,12 @@ class EnvironmentForm extends Component {
             addEnvScript: this.refs.addEnvScript.checked,
             overwriteDeployScript: this.refs.overwriteDeployScript.checked,
             environment: {
-                title: this.refs.title.value
+                title: this.refs.title.value,
+                priority: this.refs.priority.value,
+                groups: this.refs.groups.value,
+                hosts: this.refs.hosts.value,
+                scriptEnv: this.refs.scriptEnv.value,
+                scriptDeploy: this.refs.scriptDeploy.value
             }
         });
     }
@@ -35,6 +46,14 @@ class EnvironmentForm extends Component {
         const { addEnvScript, overwriteDeployScript } = this.state;
         const { submitLabel, environment, savedEnvironment } = this.props;
         const env = mergeEntityAndFormState(environment, this.state.environment);
+
+        // Make groups and hosts strings again (when comming from api)
+        if (Array.isArray(env.groups)) {
+            env.groups = env.groups.join(',')
+        }
+        if (Array.isArray(env.hosts)) {
+            env.hosts = env.hosts.join(',')
+        }
 
         let error = null;
         if (savedEnvironment.status === STATUS_FAILURE) {
@@ -55,7 +74,7 @@ class EnvironmentForm extends Component {
                     ref="title"
                     value={env.title}
                     onChange={this.handleChange}
-                    placeholder="Stage"
+                    placeholder="Production"
                 />
 
                 <label>
@@ -70,6 +89,34 @@ class EnvironmentForm extends Component {
                     value={env.priority}
                     onChange={this.handleChange}
                     placeholder="1"
+                />
+
+                <label>
+                    Groups
+                    <span className="text-muted">
+                        &nbsp;(comma separated list of host groups targeted by this environment's deployments)
+                    </span>
+                </label>
+                <input
+                    type="text"
+                    ref="groups"
+                    value={env.groups}
+                    onChange={this.handleChange}
+                    placeholder="appx_prod,..."
+                />
+
+                <label>
+                    Hosts
+                    <span className="text-muted">
+                        &nbsp;(optionnal; comma separated list of hosts targeted by this environment's deployments)
+                    </span>
+                </label>
+                <input
+                    type="text"
+                    ref="hosts"
+                    value={env.hosts}
+                    onChange={this.handleChange}
+                    placeholder="useast_appx_web_prod_001,eurwest_appx_web_prod,..."
                 />
 
                 <fieldset className="card">

@@ -99,7 +99,7 @@ export function projectsUpdate(project) {
 export function environmentsCreate(projectId, body) {
     return {
         [CALL_API]: {
-            id: 'create',
+            id: 'created',
             entityType: 'environments',
             method: 'POST',
             endpoint: `/v1/projects/${projectId}/environments/`,
