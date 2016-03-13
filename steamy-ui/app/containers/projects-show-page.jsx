@@ -1,11 +1,12 @@
 import * as ActionTypes from '../actions';
-import React, { Component } from 'react';
 import ProjectNav from '../components/project-nav.jsx';
-import { STATUS_SUCCESS, STATUS_FAILURE } from '../lib/api-middleware';
+import React, { Component } from 'react';
+import moment from 'moment';
 import { Link } from 'react-router';
+import { STATUS_SUCCESS, STATUS_FAILURE } from '../lib/api-middleware';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { pipe, values, map, filter, prop, propEq, uniqBy, sortBy, take } from 'ramda';
+import { push } from 'react-router-redux';
 
 class ProjectsShowPage extends Component {
     constructor(params) {
@@ -38,12 +39,9 @@ class ProjectsShowPage extends Component {
     }
 
     render() {
-        const { project, projects, builds } = this.props;
+        const { project, projects } = this.props;
 
-        const settingsUrl = `/projects/${project.id}/settings`;
         const newEnvironmentUrl = `/projects/${project.id}/environments/create`;
-
-        console.log(builds);
 
         return (
             <div>
@@ -62,15 +60,7 @@ class ProjectsShowPage extends Component {
                             </Link>
                         </header>
 
-                        <section className="empty-state">
-                            <span>
-                                Create your first build by visiting the&nbsp;
-                                <Link to={settingsUrl}>Project Settings</Link>
-                                &nbsp;and configuring a commit webhook. Then,
-                                simply push a new commit and steamy will start a
-                                build for it!
-                            </span>
-                        </section>
+                        {this.renderBuilds()}
                     </div>
 
                     <div className="project__col">
@@ -108,6 +98,65 @@ class ProjectsShowPage extends Component {
                 </div>
             </div>
         );
+    }
+
+    renderBuilds() {
+        const { id, builds } = this.props;
+
+        const settingsUrl = `/projects/${id}/settings`;
+
+        if (builds.length === 0) {
+            return (
+                <section className="empty-state">
+                    <span>
+                        Create your first build by visiting the&nbsp;
+                        <Link to={settingsUrl}>Project Settings</Link>
+                        &nbsp;and configuring a commit webhook. Then,
+                        simply push a new commit and steamy will start a
+                        build for it!
+                    </span>
+                </section>
+            );
+        }
+
+        return map(build => (
+            <article className="card card--with-status card--with-header card--with-quick-actions" key={build.id}>
+                <div className={'card__status card__status--' + build.status} />
+
+                <div className="card__header">
+                    {build.version} [{build.status}]
+                </div>
+
+                <div className="card__quick-actions">
+                    <a className="card__quick-actions__action card__quick-actions__action--3">
+                        <i className="fa fa-info" />
+                    </a>
+                    <a className="card__quick-actions__action card__quick-actions__action--3">
+                        <i className="fa fa-arrow-right" />
+                    </a>
+                    <a className="card__quick-actions__action card__quick-actions__action--3">
+                        <i className="fa fa-ban" />
+                    </a>
+                </div>
+
+                <div className="card__attribute" style={{fontFamily: '"Courier New", Courier, monospace'}}>
+                    <i className="fa fa-dot-circle-o" />
+                    {build.repoCommit.slice(0, 7)}
+                </div>
+                <div className="card__attribute">
+                    <i className="fa fa-code-fork" />
+                    {build.repoBranch}
+                </div>
+                <div className="card__attribute">
+                    <i className="fa fa-calendar-o" />
+                    {moment(build.created).fromNow()}
+                </div>
+                <div className="card__attribute">
+                    <i className="fa fa-user" />
+                    {build.publisher}
+                </div>
+            </article>
+        ), builds);
     }
 }
 

@@ -2,6 +2,11 @@
 /* darker green: #3AB34F */
 /* light purple: #7F2BFF */
 
+/* status waiting: #EDB941 */
+/* status running: #2B84D2 */
+/* status succeeded: #319E45 */
+/* status failed: #D02950 */
+
 body, html {
     margin: 0;
     color: #222;
@@ -46,7 +51,7 @@ textarea[readonly] {
     margin-bottom: 2rem;
 }
 .alert--error {
-    background: #ec583b;
+    background: #D02950;
     color: #fff;
 }
 
@@ -105,6 +110,88 @@ body.is-full-width .container {
     width: 100%;
     max-width: 100%;
     padding: 0 2rem;
+}
+
+/* Card */
+.card {
+    position: relative;
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    margin: 0.5em 0;
+}
+.card--with-status {
+    padding-left: 2rem;
+}
+.card__status {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 1rem;
+}
+.card__status--waiting {
+    background: #EDB941
+}
+.card__status--running {
+    background: #2B84D2
+}
+.card__status--failed {
+    background: #D02950;
+}
+.card__status--succeeded {
+    background: #319E45;
+}
+.card__header {
+    margin: -1rem -1rem 1rem -1rem;
+    background: #fafafa;
+    border-bottom: 1px solid #ddd;
+    padding: 0.5rem 1rem;
+
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.875em;
+    font-weight: bold
+}
+.card__attribute i {
+    display-inline: block;
+    width: 2.5rem;
+    text-align: center;
+}
+.card__quick-actions {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 2.8rem;
+    text-align: center;
+    border-left: 1px solid #ddd;
+}
+.card--with-header .card__quick-actions {
+    top: 3.5rem;
+}
+.card__quick-actions__action {
+    color: #222;
+    border-bottom: 1px solid #ddd;
+}
+.card__quick-actions__action:last-child {
+    border-bottom: 0;
+}
+.card__quick-actions__action:hover {
+    background: #fafafa;
+}
+.card__quick-actions__action:before {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.card__quick-actions__action--1 {
+    height: 100%;
+    display: block;
+}
+.card__quick-actions__action--3 {
+    height: 33.333333%;
+    display: block;
 }
 
 /* Header */
