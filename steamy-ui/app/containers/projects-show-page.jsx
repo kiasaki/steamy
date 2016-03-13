@@ -15,7 +15,6 @@ class ProjectsShowPage extends Component {
     }
 
     componentDidMount() {
-        const id = this.props.id;
         this.props.dispatch(ActionTypes.projectsFetchList());
         document.body.className = "is-full-width";
     }
@@ -25,7 +24,6 @@ class ProjectsShowPage extends Component {
     }
 
     handleNewProjectSelected(newProjectId) {
-        console.log(newProjectId);
         this.props.dispatch(push(`/projects/${newProjectId}`));
     }
 

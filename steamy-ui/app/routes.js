@@ -6,6 +6,7 @@ import App from './containers/app.jsx';
 import ProjectsShowPage from './containers/projects-show-page.jsx';
 import ProjectsIndexPage from './containers/projects-index-page.jsx';
 import ProjectsCreatePage from './containers/projects-create-page.jsx';
+import ProjectsSettingsPage from './containers/projects-settings-page.jsx';
 
 import HostsIndexPage from './containers/hosts-index-page.jsx';
 
@@ -22,6 +23,7 @@ export default (
         <IndexRoute component={ProjectsIndexPage} />
         <Route path="projects/create" component={ProjectsCreatePage} />
         <Route path="projects/:id" component={ProjectsShowPage} />
+        <Route path="projects/:id/settings" component={ProjectsSettingsPage} />
 
         <Route path="hosts" component={HostsIndexPage} />
 

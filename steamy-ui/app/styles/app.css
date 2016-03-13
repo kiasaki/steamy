@@ -19,6 +19,13 @@ a {
     cursor: pointer;
 }
 
+input[type=text][readonly],
+input[type=email][readonly],
+input[type=password][readonly],
+textarea[readonly] {
+    background: #efefef;
+}
+
 .text-right {
     text-align: right;
 }
@@ -76,9 +83,22 @@ a {
     font-size: 1.1em;
     border-bottom: 1px solid #ccc;
 }
+.box__header {
+    font-size: 2rem;
+    margin: 2rem 0 -2rem 1.5rem;
+}
 
 form button {
     display: block;
+}
+form textarea {
+    font-size: 1.4rem;
+}
+form.form-fullwidth input[type=text],
+form.form-fullwidth input[type=email],
+form.form-fullwidth input[type=password],
+form.form-fullwidth textarea {
+    width: 100%;
 }
 
 body.is-full-width .container {

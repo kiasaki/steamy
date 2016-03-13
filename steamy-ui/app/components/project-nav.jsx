@@ -38,15 +38,21 @@ class ProjectNav extends Component {
             <nav className="page-navigation page-navigation--project">
                 <div className="container cf">
                     <div className="pull-left">
-                        <select onChange={this.handleChange} defaultValue={project.data.id}>
-                            {projectsOptions}
-                        </select>
-                        <Link to={`/projects/${project.id}/settings`}>
+                        {this.props.isOnRelatedPage ? (
+                            <Link to={`/projects/${project.data.id}`}>
+                                &larr; Back to project
+                            </Link>
+                        ) : (
+                            <select onChange={this.handleChange} defaultValue={project.data.id}>
+                                {projectsOptions}
+                            </select>
+                        )}
+                        <Link to={`/projects/${project.data.id}/settings`}>
                             Project settings
                         </Link>
                     </div>
                     <div className="pull-right">
-                        <Link to={`/projects/${project.id}/environment/create`}>
+                        <Link to={`/projects/${project.data.id}/environment/create`}>
                             + New Environment
                         </Link>
                         <a href="https://github.com/kiasaki/steamy/blob/master/docs/README.md" target="_blank">
@@ -62,7 +68,8 @@ class ProjectNav extends Component {
 ProjectNav.propTypes = {
     project: PropTypes.object,
     projects: PropTypes.array.isRequired,
-    handleNewProjectSelected: PropTypes.func.isRequired
+    handleNewProjectSelected: PropTypes.func,
+    isOnRelatedPage: PropTypes.bool
 };
 
 export default ProjectNav;

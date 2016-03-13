@@ -71,14 +71,26 @@ export function projectsFetchList(params) {
         }
     };
 }
-export function projectsCreate(title) {
+export function projectsCreate(project) {
     return {
         [CALL_API]: {
             entityType: 'projects',
             id: 'created',
             method: 'POST',
             endpoint: '/v1/projects/',
-            body: {title}
+            body: project
+        }
+    };
+}
+
+export function projectsUpdate(project) {
+    return {
+        [CALL_API]: {
+            entityType: 'projects',
+            id: 'updated',
+            method: 'PATCH',
+            endpoint: `/v1/projects/${project.id}/`,
+            body: project
         }
     };
 }

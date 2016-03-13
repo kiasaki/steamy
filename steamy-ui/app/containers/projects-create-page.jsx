@@ -1,4 +1,5 @@
 import * as ActionTypes from '../actions';
+import ProjectFormFields from '../components/project-form-fields.jsx';
 import React, { Component } from 'react';
 import SimpleNav from '../components/simple-nav.jsx';
 import { STATUS_SUCCESS, STATUS_FAILURE } from '../lib/api-middleware';
@@ -9,7 +10,10 @@ class ProjectsCreatePage extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {project: {}};
+
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount() {
@@ -33,14 +37,17 @@ class ProjectsCreatePage extends Component {
     handleSubmit(event) {
         event.preventDefault();
 
-        const title = this.refs.title.value;
-        this.props.dispatch(ActionTypes.projectsCreate(title));
+        this.props.dispatch(ActionTypes.projectsCreate(this.state.project));
+    }
+
+    handleChange(project) {
+        this.setState({project});
     }
 
     render() {
         const project = this.props.project;
-        let error = null;
 
+        let error = null;
         if (project.status === STATUS_FAILURE) {
             error = (
                 <div className="alert alert--error">
@@ -55,11 +62,13 @@ class ProjectsCreatePage extends Component {
 
                 <div className="container">
                     <div className="box">
-                        <form onSubmit={this.handleSubmit}>
+                        <form onSubmit={this.handleSubmit} className="form-fullwidth">
                             {error}
 
-                            <label>Title</label>
-                            <input type="text" ref="title" autoFocus />
+                            <ProjectFormFields
+                                project={this.state.project}
+                                onChange={this.handleChange}
+                            />
 
                             <button type="submit">
                                 Create
