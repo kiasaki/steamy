@@ -66,6 +66,13 @@ var routes = Routes{
 		false,
 		V1ProjectsCreate,
 	},
+	Route{
+		"V1ProjectsUpdate",
+		"PATCH",
+		"/v1/projects/{id}/",
+		false,
+		V1ProjectsUpdate,
+	},
 
 	// Hosts
 

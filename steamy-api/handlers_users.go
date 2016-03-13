@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/kiasaki/steamy/steamy-api/data"
@@ -77,6 +78,7 @@ func V1UsersCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user.Id = util.NewUUID().String()
+	user.ApiToken = strings.Replace(util.NewUUID().String(), "-", "", -1)
 	user.Deleted = false
 	user.Created = time.Now()
 
@@ -104,7 +106,6 @@ func V1UsersUpdate(w http.ResponseWriter, r *http.Request) {
 	var user = &data.User{}
 	err := Bind(r, user)
 	if err != nil {
-		fmt.Println(err)
 		SetBadRequestResponse(w)
 		WriteEntity(w, J{"error": "Error reading request entity"})
 		return
