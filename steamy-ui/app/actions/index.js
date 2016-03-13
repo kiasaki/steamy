@@ -95,6 +95,19 @@ export function projectsUpdate(project) {
     };
 }
 
+// Environments
+export function environmentsCreate(projectId, body) {
+    return {
+        [CALL_API]: {
+            id: 'create',
+            entityType: 'environments',
+            method: 'POST',
+            endpoint: `/v1/projects/${projectId}/environments/`,
+            body
+        }
+    };
+}
+
 // Hosts
 export function hostsFetchList(params) {
     return {

@@ -31,12 +31,13 @@ CREATE TABLE projects (
 
 CREATE TABLE environments (
     id uuid NOT NULL,
+    project_id uuid NOT NULL REFERENCES projects (id),
     title text NOT NULL,
+    priority text NOT NULL,
     script_env text NOT NULL,
     script_deploy text NOT NULL,
     hosts text[] NOT NULL,
     groups text[] NOT NULL,
-    project_id uuid NOT NULL REFERENCES projects (id),
     PRIMARY KEY (id),
     CONSTRAINT environments_id UNIQUE (id)
 );

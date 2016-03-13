@@ -5,7 +5,7 @@ import moment from 'moment';
 import { Link } from 'react-router';
 import { STATUS_SUCCESS, STATUS_FAILURE } from '../lib/api-middleware';
 import { connect } from 'react-redux';
-import { pipe, values, map, filter, prop, propEq, uniqBy, sortBy, take } from 'ramda';
+import { pipe, values, map, filter, prop, propEq, uniqBy, sortBy, take, reverse } from 'ramda';
 import { push } from 'react-router-redux';
 
 class ProjectsShowPage extends Component {
@@ -39,9 +39,9 @@ class ProjectsShowPage extends Component {
     }
 
     render() {
-        const { project, projects } = this.props;
+        const { id, project, projects } = this.props;
 
-        const newEnvironmentUrl = `/projects/${project.id}/environments/create`;
+        const newEnvironmentUrl = `/projects/${id}/environments/create`;
 
         return (
             <div>
@@ -55,30 +55,12 @@ class ProjectsShowPage extends Component {
                     <div className="project__col">
                         <header className="project__header">
                             Builds
-                            <Link to="/" className="pull-right">
-                                <i className="fa fa-cog" />
-                            </Link>
                         </header>
 
                         {this.renderBuilds()}
                     </div>
 
-                    <div className="project__col">
-                        <header className="project__header">
-                            Stage
-                            <Link to="/" className="pull-right">
-                                <i className="fa fa-cog" />
-                            </Link>
-                        </header>
-
-                        <section className="empty-state">
-                            <span>
-                                Create you first deployment to this environment
-                                by clicking on the "Deploy" button on any build
-                                to the left.
-                            </span>
-                        </section>
-                    </div>
+                    {this.renderEnvironments()}
 
                     <div className="project__col">
                         <header className="project__header text-muted">
@@ -128,35 +110,64 @@ class ProjectsShowPage extends Component {
                 </div>
 
                 <div className="card__quick-actions">
-                    <a className="card__quick-actions__action card__quick-actions__action--3">
+                    <a className="card__quick-actions__action card__quick-actions__action--3" title="Details">
                         <i className="fa fa-info" />
                     </a>
-                    <a className="card__quick-actions__action card__quick-actions__action--3">
+                    <a className="card__quick-actions__action card__quick-actions__action--3" title="Deploy">
                         <i className="fa fa-arrow-right" />
                     </a>
-                    <a className="card__quick-actions__action card__quick-actions__action--3">
+                    <a className="card__quick-actions__action card__quick-actions__action--3" title="Delete">
                         <i className="fa fa-ban" />
                     </a>
                 </div>
 
                 <div className="card__attribute" style={{fontFamily: '"Courier New", Courier, monospace'}}>
-                    <i className="fa fa-dot-circle-o" />
+                    <i className="fa fa-dot-circle-o" title="Commit" />
                     {build.repoCommit.slice(0, 7)}
                 </div>
                 <div className="card__attribute">
-                    <i className="fa fa-code-fork" />
+                    <i className="fa fa-code-fork" title="Branch" />
                     {build.repoBranch}
                 </div>
                 <div className="card__attribute">
-                    <i className="fa fa-calendar-o" />
+                    <i className="fa fa-calendar-o" title="Creation time" />
                     {moment(build.created).fromNow()}
                 </div>
                 <div className="card__attribute">
-                    <i className="fa fa-user" />
+                    <i className="fa fa-user" title="Publisher" />
                     {build.publisher}
                 </div>
             </article>
         ), builds);
+    }
+
+    renderEnvironments() {
+        return null;
+
+        return (
+            <div className="project__col">
+                <header className="project__header">
+                    Stage
+                    <Link to="/" className="pull-right" title="Settings">
+                        <i className="fa fa-cog" />
+                    </Link>
+                </header>
+
+                {this.renderEnvironment()}
+            </div>
+        );
+    }
+
+    renderEnvironment(environment) {
+        return (
+            <section className="empty-state">
+                <span>
+                    Create you first deployment to this environment
+                    by clicking on the "Deploy" button on any build
+                    to the left.
+                </span>
+            </section>
+        );
     }
 }
 
@@ -176,6 +187,7 @@ const mapStateToProps = (state, ownProps) => {
         extractFilterSortEntities,
         filter(propEq('projectId', id)),
         sortBy(prop('created')),
+        reverse,
         take(20)
     )(state.entities.builds);
 
