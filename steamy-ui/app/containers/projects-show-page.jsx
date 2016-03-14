@@ -132,7 +132,7 @@ class ProjectsShowPage extends Component {
                 </div>
                 <div className="card__attribute">
                     <i className="fa fa-calendar-o" title="Creation time" />
-                    {moment(build.created).fromNow()}
+                    {moment.utc(build.created).fromNow()}
                 </div>
                 <div className="card__attribute">
                     <i className="fa fa-user" title="Publisher" />

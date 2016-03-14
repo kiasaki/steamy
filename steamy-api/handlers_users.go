@@ -80,7 +80,7 @@ func V1UsersCreate(w http.ResponseWriter, r *http.Request) {
 	user.Id = util.NewUUID().String()
 	user.ApiToken = strings.Replace(util.NewUUID().String(), "-", "", -1)
 	user.Deleted = false
-	user.Created = time.Now()
+	user.Created = time.Now().UTC()
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), BCRYPT_COST)
 	if err != nil {

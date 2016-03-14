@@ -80,7 +80,7 @@ func V1HooksCommit(w http.ResponseWriter, r *http.Request) {
 			RepoBranch: ghPayload.Ref[len("refs/heads/"):],
 			RepoCommit: ghPayload.HeadCommit.Id,
 			Publisher:  ghPayload.HeadCommit.Author.Email,
-			Created:    time.Now(),
+			Created:    time.Now().UTC(),
 		}
 		err = data.BuildsCreate(build)
 		if err != nil {
