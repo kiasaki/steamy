@@ -96,6 +96,26 @@ export function projectsUpdate(project) {
 }
 
 // Environments
+export function environmentsFetchList(projectId) {
+    return {
+        [CALL_API]: {
+            id: 'list',
+            entityType: 'environments',
+            method: 'GET',
+            endpoint: `/v1/projects/${projectId}/environments/`
+        }
+    };
+}
+export function environmentsFetchOne(id) {
+    return {
+        [CALL_API]: {
+            id,
+            entityType: 'environments',
+            method: 'GET',
+            endpoint: `/v1/environments/${id}/`
+        }
+    };
+}
 export function environmentsCreate(projectId, body) {
     return {
         [CALL_API]: {
@@ -103,6 +123,17 @@ export function environmentsCreate(projectId, body) {
             entityType: 'environments',
             method: 'POST',
             endpoint: `/v1/projects/${projectId}/environments/`,
+            body
+        }
+    };
+}
+export function environmentsUpdate(body) {
+    return {
+        [CALL_API]: {
+            id: 'updated',
+            entityType: 'environments',
+            method: 'PATCH',
+            endpoint: `/v1/environments/${body.id}`,
             body
         }
     };

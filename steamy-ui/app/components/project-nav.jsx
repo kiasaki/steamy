@@ -52,7 +52,7 @@ class ProjectNav extends Component {
                         </Link>
                     </div>
                     <div className="pull-right">
-                        <Link to={`/projects/${project.data.id}/environment/create`}>
+                        <Link to={`/projects/${project.data.id}/environments/create`}>
                             + New Environment
                         </Link>
                         <a href="https://github.com/kiasaki/steamy/blob/master/docs/README.md" target="_blank">

@@ -19,6 +19,7 @@ class ProjectsShowPage extends Component {
         const { id } = this.props;
 
         this.props.dispatch(ActionTypes.projectsFetchList());
+        this.props.dispatch(ActionTypes.environmentsFetchList(id));
         this.props.dispatch(ActionTypes.buildsFetchList({
             limit: 20,
             order: '-created',
@@ -142,20 +143,24 @@ class ProjectsShowPage extends Component {
     }
 
     renderEnvironments() {
-        return null;
+        const { environments } = this.props;
 
-        return (
-            <div className="project__col">
+        const environmentUrl = environment => (
+            `/projects/${environment.projectId}/environments/${environment.id}/settings`
+        );
+
+        return map(environment => (
+            <div className="project__col" key={environment.id}>
                 <header className="project__header">
-                    Stage
-                    <Link to="/" className="pull-right" title="Settings">
+                    {environment.title}
+                    <Link to={environmentUrl(environment)} className="pull-right" title="Settings">
                         <i className="fa fa-cog" />
                     </Link>
                 </header>
 
-                {this.renderEnvironment()}
+                {this.renderEnvironment(environment)}
             </div>
-        );
+        ), environments);
     }
 
     renderEnvironment(environment) {
@@ -191,7 +196,13 @@ const mapStateToProps = (state, ownProps) => {
         take(20)
     )(state.entities.builds);
 
-    return {id, project, projects, builds};
+    const environments = pipe(
+        extractFilterSortEntities,
+        filter(propEq('projectId', id)),
+        sortBy(prop('priority'))
+    )(state.entities.environments);
+
+    return {id, project, projects, builds, environments};
 };
 
 export default connect(mapStateToProps)(ProjectsShowPage);

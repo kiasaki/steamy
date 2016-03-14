@@ -9,6 +9,7 @@ import ProjectsCreatePage from './containers/projects-create-page.jsx';
 import ProjectsSettingsPage from './containers/projects-settings-page.jsx';
 
 import EnvironmentsCreatePage from './containers/environments-create-page.jsx';
+import EnvironmentsSettingsPage from './containers/environments-settings-page.jsx';
 
 import HostsIndexPage from './containers/hosts-index-page.jsx';
 
@@ -28,6 +29,7 @@ export default (
         <Route path="projects/:id/settings" component={ProjectsSettingsPage} />
 
         <Route path="projects/:projectId/environments/create" component={EnvironmentsCreatePage} />
+        <Route path="projects/:projectId/environments/:id/settings" component={EnvironmentsSettingsPage} />
 
         <Route path="hosts" component={HostsIndexPage} />
 

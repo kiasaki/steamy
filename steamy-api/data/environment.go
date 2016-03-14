@@ -27,6 +27,13 @@ func EnvironmentsFetchListByProject(projectId string) (*Environments, error) {
 	return &entities, DbGet().Select(&entities, query, projectId)
 }
 
+func EnvironmentsFetchOne(id string) (*Environment, error) {
+	var entity = Environment{}
+	var query = "SELECT " + strings.Join(environmentsColumns, ",") + " FROM environments WHERE id=$1"
+
+	return &entity, DbGet().Get(&entity, query, id)
+}
+
 func EnvironmentsCreate(entity *Environment) error {
 	var query = strings.Join([]string{
 		"INSERT INTO environments",

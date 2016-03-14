@@ -2,7 +2,7 @@ import * as ActionTypes from '../actions';
 import ProjectFormFields from '../components/project-form-fields.jsx';
 import React, { Component } from 'react';
 import SimpleNav from '../components/simple-nav.jsx';
-import { STATUS_SUCCESS, STATUS_FAILURE } from '../lib/api-middleware';
+import { STATUS_SUCCESS, STATUS_FAILURE, API_UPDATE } from '../lib/api-middleware';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
@@ -32,6 +32,16 @@ class ProjectsCreatePage extends Component {
             const id = project.data.id;
             this.props.dispatch(push(`/projects/${id}`));
         }
+    }
+
+    componentWillUnmount() {
+        // Reset created project for clean state on next user edit
+        this.props.dispatch({
+            type: API_UPDATE,
+            entityType: 'projects',
+            id: 'created',
+            response: null
+        });
     }
 
     handleSubmit(event) {

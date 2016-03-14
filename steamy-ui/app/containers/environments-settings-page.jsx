@@ -4,57 +4,56 @@ import ProjectNav from '../components/project-nav.jsx';
 import React, { Component } from 'react';
 import { STATUS_SUCCESS, API_UPDATE } from '../lib/api-middleware';
 import { connect } from 'react-redux';
+import { merge } from 'ramda';
 import { push } from 'react-router-redux';
 
-class EnvironmentsCreatePage extends Component {
+class EnvironmentsSettingsPage extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
-        const { dispatch, currentUser } = this.props;
-
-        // Ensure auth
-        if (!currentUser) {
-            dispatch(ActionTypes.fetchCurrentUser());
-        }
+        const { dispatch, id } = this.props;
+        dispatch(ActionTypes.environmentsFetchOne(id));
     }
 
     componentWillReceiveProps(nextProps) {
-        const { projectId, environment } = nextProps;
+        const { projectId, updatedEnvironment } = nextProps;
 
-        if (environment.status === STATUS_SUCCESS) {
+        if (updatedEnvironment.status === STATUS_SUCCESS) {
             this.props.dispatch(push(`/projects/${projectId}`));
         }
     }
 
     componentWillUnmount() {
-        // Reset created environment for clean state on next user edit
+        // Reset updated environment for clean state on next user edit
         this.props.dispatch({
             type: API_UPDATE,
             entityType: 'environments',
-            id: 'created',
+            id: 'updated',
             response: null
         });
     }
 
-    handleSubmit(environment) {
-        const { dispatch, projectId } = this.props;
+    handleSubmit(formState) {
+        const { dispatch, environment } = this.props;
+
+        const environmentToSave = merge(environment.data, formState);
 
         // Convert comma separated lists to actual arrays
-        if (!Array.isArray(environment.groups)) {
-            environment.groups = environment.groups.split(',').map(s => s.trim());
+        if (!Array.isArray(environmentToSave.groups)) {
+            environmentToSave.groups = environmentToSave.groups.split(',').map(s => s.trim());
         }
-        if (!Array.isArray(environment.hosts)) {
-            environment.hosts = environment.hosts.split(',').map(s => s.trim());
+        if (!Array.isArray(environmentToSave.hosts)) {
+            environmentToSave.hosts = environmentToSave.hosts.split(',').map(s => s.trim());
         }
 
-        dispatch(ActionTypes.environmentsCreate(projectId, environment));
+        dispatch(ActionTypes.environmentsUpdate(environmentToSave));
     }
 
     render() {
-        const { projectId, environment } = this.props;
+        const { projectId, environment, updatedEnvironment } = this.props;
 
         return (
             <div>
@@ -65,12 +64,12 @@ class EnvironmentsCreatePage extends Component {
                 />
 
                 <div className="container">
-                    <h1 className="box__header">New Environment</h1>
+                    <h1 className="box__header">Environment Settings</h1>
                     <div className="box">
                         <EnvironmentForm
-                            submitLabel="Create"
+                            submitLabel="Save"
                             environment={environment}
-                            savedEnvironment={environment}
+                            savedEnvironment={updatedEnvironment}
                             onSubmit={this.handleSubmit}
                         />
                     </div>
@@ -81,12 +80,12 @@ class EnvironmentsCreatePage extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const { projectId } = ownProps.params;
+    const { projectId, id } = ownProps.params;
     const { entities } = state;
-    const currentUser = entities.users.current;
-    const environment = entities.environments.created || {};
+    const environment = entities.environments[id] || {};
+    const updatedEnvironment = entities.environments.updated || {};
 
-    return {projectId, currentUser, environment};
+    return {projectId, id, environment, updatedEnvironment};
 };
 
-export default connect(mapStateToProps)(EnvironmentsCreatePage);
+export default connect(mapStateToProps)(EnvironmentsSettingsPage);
