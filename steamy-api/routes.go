@@ -110,7 +110,7 @@ var routes = Routes{
 	Route{
 		"V1EnvironmentsUpdate",
 		"PATCH",
-		"/v1/projects/{projectId}/environments/{id}/",
+		"/v1/environments/{id}/",
 		false,
 		V1EnvironmentsUpdate,
 	},

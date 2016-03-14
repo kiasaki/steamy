@@ -94,5 +94,26 @@ func V1EnvironmentsCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 func V1EnvironmentsUpdate(w http.ResponseWriter, r *http.Request) {
-	SetNotFoundResponse(w)
+	var id = PathString(r, "id")
+	var environment = &data.Environment{}
+	err := Bind(r, environment)
+	if err != nil {
+		SetBadRequestResponse(w)
+		WriteEntity(w, J{"error": "Error reading request entity"})
+		return
+	}
+	environment.Id = id
+
+	if !validateEnvironment(w, environment, true) {
+		return
+	}
+
+	err = data.EnvironmentsUpdate(environment)
+	if err != nil {
+		SetInternalServerErrorResponse(w, err)
+		WriteEntity(w, J{"error": "Error saving update to database"})
+		return
+	}
+
+	SetOKResponse(w, J{"data": environment})
 }
