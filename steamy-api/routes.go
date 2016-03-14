@@ -94,6 +94,13 @@ var routes = Routes{
 		V1EnvironmentsIndex,
 	},
 	Route{
+		"V1EnvironmentsShow",
+		"GET",
+		"/v1/environments/{id}/",
+		false,
+		V1EnvironmentsShow,
+	},
+	Route{
 		"V1EnvironmentsCreate",
 		"POST",
 		"/v1/projects/{projectId}/environments/",

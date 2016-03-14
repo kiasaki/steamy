@@ -19,6 +19,21 @@ func V1EnvironmentsIndex(w http.ResponseWriter, r *http.Request) {
 	SetOKResponse(w, J{"data": environments})
 }
 
+func V1EnvironmentsShow(w http.ResponseWriter, r *http.Request) {
+	var id = PathString(r, "id")
+
+	environment, err := data.EnvironmentsFetchOne(id)
+	if err == sql.ErrNoRows {
+		SetNotFoundResponse(w)
+		WriteEntity(w, J{"error": "Can't find environment"})
+	} else if err != nil {
+		SetInternalServerErrorResponse(w, err)
+		return
+	}
+
+	SetOKResponse(w, J{"data": environment})
+}
+
 func validateEnvironment(w http.ResponseWriter, environment *data.Environment, update bool) bool {
 	_, err := data.ProjectsFetchOne(environment.ProjectId)
 	if err == sql.ErrNoRows {
