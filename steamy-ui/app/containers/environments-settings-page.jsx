@@ -2,7 +2,7 @@ import * as ActionTypes from '../actions';
 import EnvironmentForm from '../components/environment-form.jsx';
 import ProjectNav from '../components/project-nav.jsx';
 import React, { Component } from 'react';
-import { STATUS_SUCCESS, API_UPDATE } from '../lib/api-middleware';
+import { STATUS_REQUEST, STATUS_FAILURE, STATUS_SUCCESS, API_UPDATE } from '../lib/api-middleware';
 import { connect } from 'react-redux';
 import { merge } from 'ramda';
 import { push } from 'react-router-redux';
@@ -54,6 +54,19 @@ class EnvironmentsSettingsPage extends Component {
 
     render() {
         const { projectId, environment, updatedEnvironment } = this.props;
+
+        if (!environment || environment.status == STATUS_REQUEST) {
+            return (
+                <h3 className="text-center">Loading...</h3>
+            );
+        } else if (environment.status == STATUS_FAILURE) {
+            return (
+                <div className="container">
+                    <br />
+                    <div className="alert alert--error">{environment.error}</div>
+                </div>
+            );
+        }
 
         return (
             <div>

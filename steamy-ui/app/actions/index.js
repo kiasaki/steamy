@@ -133,7 +133,7 @@ export function environmentsUpdate(body) {
             id: 'updated',
             entityType: 'environments',
             method: 'PATCH',
-            endpoint: `/v1/environments/${body.id}`,
+            endpoint: `/v1/environments/${body.id}/`,
             body
         }
     };

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { mergeWith } from 'ramda';
+import { merge } from 'ramda';
 import { STATUS_FAILURE } from '../lib/api-middleware';
 
 class EnvironmentForm extends Component {
@@ -45,7 +45,7 @@ class EnvironmentForm extends Component {
     render() {
         const { addEnvScript, overwriteDeployScript } = this.state;
         const { submitLabel, environment, savedEnvironment } = this.props;
-        const env = mergeEntityAndFormState(environment, this.state.environment);
+        const env = merge(environment.data, this.state.environment);
 
         // Make groups and hosts strings again (when comming from api)
         if (Array.isArray(env.groups)) {
@@ -175,15 +175,6 @@ class EnvironmentForm extends Component {
             </form>
         );
     }
-}
-
-function mergeEntityAndFormState(entity, formState) {
-    return mergeWith((a, b) => {
-        if (b === '' && a) {
-            return a;
-        }
-        return b;
-    }, entity.data || {}, formState);
 }
 
 EnvironmentForm.propTypes = {
