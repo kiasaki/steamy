@@ -3,4 +3,5 @@ steamy-api/steamy-api
 steamy-ui/app-bundle.js
 steamy-ui/app-bundle.js.map
 steamy-ui/node_modules
+steamy-agent/steamy-agent
 example-project/node_modules
