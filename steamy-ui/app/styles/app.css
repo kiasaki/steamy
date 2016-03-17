@@ -353,8 +353,7 @@ body.is-full-width .container {
     position: absolute;
     top: 9.8rem;
     bottom: 0;
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: auto;
     white-space: nowrap;
     width: 100%;
 }
