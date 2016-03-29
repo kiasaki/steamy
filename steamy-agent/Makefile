@@ -1,5 +1,5 @@
 build:
 	go build -o steamy-agent .
 
-run:
+run: build
 	./steamy-agent -config example.ini ${CMD}

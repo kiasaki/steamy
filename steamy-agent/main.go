@@ -28,6 +28,6 @@ func main() {
 	case "config":
 		cmdConfig(config)
 	default:
-		flag.Usage()
+		cmdHelp()
 	}
 }
