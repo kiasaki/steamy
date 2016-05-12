@@ -76,7 +76,7 @@ First step is to have `steamy-{api,ui}` up and running somewhere you have access
 
 **2. Agent installation**
 
-Next step you need to install `steamy-agent` on your taget hosts and specify the hosts **name** and **groups** in a config file.
+Next step you need to install `steamy-agent` on your target hosts and specify the hosts **name** and **groups** in a config file.
 
 _Make sure at least one host is in the `build` group as **steamy** will need at leat one machine to dispatch build tasks to._
 
