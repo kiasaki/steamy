@@ -9,7 +9,7 @@ import (
 
 type ConfigHost struct {
 	Name   string
-	Groups string
+	Groups []string
 }
 
 type Config struct {
@@ -32,7 +32,7 @@ func DefaultConfig() *Config {
 		ProcessTimeout:    1800,
 		ConfigHost: ConfigHost{
 			Name:   "",
-			Groups: "",
+			Groups: []string{},
 		},
 	}
 }

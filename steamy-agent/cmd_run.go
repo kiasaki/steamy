@@ -10,6 +10,7 @@ func cmdRun(config *Config) {
 	fmt.Println("state: started")
 
 	upTicker := time.Tick(30 * time.Second)
+	time.Sleep(5 * time.Second) // makes ups and checks spaced out a bit
 	checkForTaskTicker := time.Tick(15 * time.Second)
 
 	for {
