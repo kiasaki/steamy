@@ -9,8 +9,8 @@ _Steamy is a deployment solution, it's simple & minimalistic making it quite fle
 This project is composed of four sub-components:
 
 - `steamy-ui` The user interface you as a human will interact with.
-- `steamy-api` The place where all the state and history of you deployments is kept.
-- `steamy-agent` The program that will on you target server ready to pull in new code when asked.
+- `steamy-api` The place where all the state and history of your deployments is kept.
+- `steamy-agent` The program that will on your target server ready to pull in new code when asked.
 - `steamy-cli` A command line tool to access **steamy**'s information and trigger deploys (as an alternative to the UI).
 
 ## quick start
@@ -45,7 +45,7 @@ $ service steamy-api start
 $ service steamy-ui start
 ```
 
-At this point the UI should be available at `http://<server-ip>:9494/` given you have the right environment variables setup for `steamy-api` to connect to a postgres databe.
+At this point the UI should be available at `http://<server-ip>:9494/` given you have the right environment variables setup for `steamy-api` to connect to a postgres database.
 
 ## concepts
 
@@ -76,7 +76,7 @@ First step is to have `steamy-{api,ui}` up and running somewhere you have access
 
 **2. Agent installation**
 
-Next step you need to install `steamy-agent` on your taget hosts and specify the hosts **name** and **groups** in a config file.
+Next step you need to install `steamy-agent` on your target hosts and specify the hosts **name** and **groups** in a config file.
 
 _Make sure at least one host is in the `build` group as **steamy** will need at leat one machine to dispatch build tasks to._
 
