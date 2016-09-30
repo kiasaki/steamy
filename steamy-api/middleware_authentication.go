@@ -17,6 +17,7 @@ func RequireAuthentication(inner http.Handler) http.Handler {
 		var userId string
 		var user *data.User
 		var tokenString string
+		var claims jwt.MapClaims
 		var prefixLength = len("Bearer ")
 		var apiAuthorization = r.Header.Get("Authorization")
 		var apiToken = r.Header.Get("X-Api-Token")
@@ -50,7 +51,8 @@ func RequireAuthentication(inner http.Handler) http.Handler {
 
 		tokenString = apiAuthorization[prefixLength:]
 
-		token, err = jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		claims = jwt.MapClaims{}
+		token, err = jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 			// Validate the alg is the one we used to sign token
 			if token.Method.Alg() != jwt.SigningMethodHS256.Alg() {
 				return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
@@ -65,11 +67,11 @@ func RequireAuthentication(inner http.Handler) http.Handler {
 		}
 
 		// Is the needed uid even in there?
-		if token.Claims["uid"] == nil {
+		if claims["uid"] == nil {
 			goto failure
 		}
 
-		userId = token.Claims["uid"].(string)
+		userId = claims["uid"].(string)
 		user, err = data.UsersFetchOne(userId)
 
 		// Is user deleted?

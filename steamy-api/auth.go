@@ -11,10 +11,11 @@ import (
 )
 
 func createAuthToken(userId string, hoursOfValidity int) (string, error) {
-	token := jwt.New(jwt.SigningMethodHS256)
+	claims := jwt.MapClaims{}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	token.Claims["uid"] = userId
-	token.Claims["exp"] = time.Now().Add(time.Hour * time.Duration(hoursOfValidity)).Unix()
+	claims["uid"] = userId
+	claims["exp"] = time.Now().Add(time.Hour * time.Duration(hoursOfValidity)).Unix()
 
 	return token.SignedString([]byte(configSecret))
 }
